@@ -5,11 +5,11 @@
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
-    "dev": "npm run clean && webpack-dev-server",
-    "lint": "prettier-standard 'src/**/*.{js,ts}' && standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/**/*.{js,ts}'",
+    "dev": "npm run clean && node --inspect ./node_modules/.bin/webpack-dev-server",
+    "lint": "prettier-standard 'src/**/*.{js,ts}' && standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts}'",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node ./build/server",
-    "test": "standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/**/*.{js,ts}' && jest",
+    "test": "tsc --noEmit && standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts}' && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"

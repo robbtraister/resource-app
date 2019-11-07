@@ -3,6 +3,7 @@
     "baseUrl": "./",
     "esModuleInterop": true,
     "jsx": "preserve",
+    "noUnusedLocals": true,
     "paths": {
       "~/*": ["./*"]
     },
