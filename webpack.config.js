@@ -32,7 +32,7 @@ const entry = {
 
 const output = {
   filename: '[name].js',
-  libraryTarget: 'commonjs2',
+  chunkFilename: '[name].js',
   path: path.resolve(__dirname, 'build')
 }
 
@@ -168,7 +168,10 @@ module.exports = (_, argv) => {
       module: {
         rules: rules({ isProd })
       },
-      output,
+      output: {
+        ...output,
+        libraryTarget: 'commonjs2'
+      },
       plugins: [
         new DefinePlugin({
           __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
