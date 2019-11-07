@@ -11,7 +11,8 @@ export default function router (options) {
 
   assetRouter.all(
     '/favicon.ico',
-    express.static(publicRoot, { fallthrough: false })
+    express.static(publicRoot),
+    (req, res, next) => { res.sendStatus(404) }
   )
   assetRouter.use(express.static(publicRoot))
 
