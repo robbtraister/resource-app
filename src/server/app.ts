@@ -1,7 +1,5 @@
 'use strict'
 
-import path from 'path'
-
 import compression from 'compression'
 import express from 'express'
 
@@ -15,12 +13,6 @@ export default function app (
   app.disable('x-powered-by')
 
   app.use(compression())
-
-  app.use(
-    '/dist',
-    express.static(path.join(options.projectRoot || '.', 'dist'))
-  )
-  app.use(express.static(path.join(options.projectRoot || '.', 'public')))
 
   app.use(router(options))
 

@@ -133,7 +133,7 @@ module.exports = (_, argv) => {
       name: 'server',
       devServer: {
         before: (app) => {
-          app.use((req, res, next) => {
+          app.use(/^(?!\/dist\/)/, (req, res, next) => {
             Object.keys(require.cache)
               .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
               .forEach(pkg => {
