@@ -11,8 +11,7 @@ export default function app (options: { isProd?: boolean, projectRoot?: string }
 
   app.disable('x-powered-by')
 
-  options.projectRoot &&
-    app.use(express.static(path.join(options.projectRoot, 'public')))
+  app.use(express.static(path.join(options.projectRoot || '.', 'public')))
 
   app.use(router(options))
 
