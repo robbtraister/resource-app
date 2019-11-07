@@ -6,5 +6,6 @@ services:
       dockerfile: dev.Dockerfile
     volumes:
       # - ./build:/opt/nodejs/build:rw
+      # - ./dist:/opt/nodejs/dist:rw
       - ./public:/opt/nodejs/public:ro
       - ./src:/opt/nodejs/src:ro

@@ -17,7 +17,7 @@ export default function server (options: { port?: number } = {}) {
   )
 }
 
-function main (options: { port?: number, workerCount?: number } = {}) {
+function main (options: { port?: number; workerCount?: number } = {}) {
   if (cluster.isMaster) {
     const workerCount = Number(options.workerCount) || env.workerCount
 

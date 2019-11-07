@@ -48,6 +48,7 @@ COPY ./public ./public
 
 ARG PROJECT
 COPY --from=build /opt/${PROJECT}/build ./build
+COPY --from=build /opt/${PROJECT}/dist ./dist
 
 ENTRYPOINT ["node"]
 CMD ["./build/server"]

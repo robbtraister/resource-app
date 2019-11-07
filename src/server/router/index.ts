@@ -1,13 +1,17 @@
 'use strict'
 
-import { Router } from 'express'
+import express from 'express'
+
+import render from './render'
 
 export default function router (options) {
-  const router = Router()
+  const router = express()
 
-  router.use((req, res, next) => {
-    res.send('hello, world!')
+  router.use('/api/uri', (req, res, next) => {
+    res.send({ uri: req.originalUrl })
   })
+
+  router.use(render(options))
 
   return router
 }

@@ -9,6 +9,23 @@ require('dotenv').config({ path: path.join(__dirname, '.env') })
 const isProd = /^prod/i.test(process.env.NODE_ENV)
 
 module.exports = {
+  app: {
+    fileLimit:
+      Number(process.env.FILE_LIMIT) ||
+      Number(config.fileLimit) ||
+      16 * 1024,
+
+    id:
+      process.env.APP_ID ||
+      (config.app && config.app.id) ||
+      'app',
+
+    title:
+      process.env.APP_TITLE ||
+      (config.app && config.app.title) ||
+      ''
+  },
+
   isProd,
 
   port:

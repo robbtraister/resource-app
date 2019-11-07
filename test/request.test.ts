@@ -8,9 +8,10 @@ import app from '../src/server/app'
 
 test('200', () => {
   return request(app({}))
-    .get('/')
+    .get('/api/uri')
     .expect(200)
+    .expect('Content-Type', /^application\/json(;|$)/)
     .then(res => {
-      assert.strictEqual(res.text, 'hello, world!')
+      assert.strictEqual(res.body.uri, '/api/uri')
     })
 })
