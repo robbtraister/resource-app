@@ -4,6 +4,8 @@ services:
   server:
     build:
       dockerfile: dev.Dockerfile
+    ports:
+      - 9229:9229
     volumes:
       # - ./build:/opt/nodejs/build:rw
       - ./public:/opt/nodejs/public:ro
