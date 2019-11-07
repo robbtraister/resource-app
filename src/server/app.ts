@@ -2,6 +2,7 @@
 
 import path from 'path'
 
+import compression from 'compression'
 import express from 'express'
 
 import router from './router'
@@ -12,6 +13,8 @@ export default function app (
   const app = express()
 
   app.disable('x-powered-by')
+
+  app.use(compression())
 
   app.use(
     '/dist',
