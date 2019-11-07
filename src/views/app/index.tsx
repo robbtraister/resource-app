@@ -2,7 +2,14 @@
 
 import React from 'react'
 
-const App = (props) =>
-  <div>Hello, World!</div>
+class App extends React.Component {
+  componentDidMount () {
+    console.log('mounted!')
+  }
+
+  render () {
+    return <div>Hello, World!</div>
+  }
+}
 
 export default App
