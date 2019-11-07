@@ -253,7 +253,14 @@ module.exports = (_, argv) => {
           defaultAttribute: 'defer'
         })
       ],
-      resolve,
+      resolve: {
+        ...resolve,
+        alias: {
+          ...resolve.alias,
+          react: 'preact/compat',
+          'react-dom': 'preact/compat'
+        }
+      },
       target: 'web',
       watchOptions
     },
