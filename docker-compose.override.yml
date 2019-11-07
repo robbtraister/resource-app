@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  server:
+    build:
+      dockerfile: dev.Dockerfile
+    volumes:
+      # - ./build:/opt/nodejs/build:rw
+      - ./public:/opt/nodejs/public:ro
+      - ./src:/opt/nodejs/src:ro

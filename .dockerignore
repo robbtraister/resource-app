@@ -1,0 +1,13 @@
+**/.DS_Store
+
+.env
+.vscode
+
+.dockerignore
+.gitignore
+.npmrc
+docker-compose.yml
+Dockerfile
+
+build/
+node_modules/

@@ -1,0 +1,60 @@
+{
+  "name": "express-server",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "build": "npm run clean && webpack",
+    "clean": "rm -rf ./build/*",
+    "dev": "npm run clean && webpack-dev-server",
+    "lint": "prettier-standard 'src/**/*.{js,ts}' && standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/**/*.{js,ts}'",
+    "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
+    "start": "node ./build/server",
+    "test": "standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/**/*.{js,ts}' && jest",
+    "preversion": "npm run test && git add -A",
+    "postversion": "git push && git push --tags",
+    "watch": "npm run build -- --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-decorators": "^7.7.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-typescript": "^7.7.2",
+    "@babel/runtime": "^7.7.2",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^24.0.22",
+    "@types/supertest": "^2.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
+    "babel-loader": "^8.0.6",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^24.9.0",
+    "prettier-standard": "^15.0.1",
+    "source-map-support": "^0.5.16",
+    "standard": "^14.3.1",
+    "supertest": "^4.0.2",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^~/(.*)": "<rootDir>/$1"
+    },
+    "testPathIgnorePatterns": [
+      "<rootDir>/build/",
+      "/node_modules/"
+    ],
+    "watchPathIgnorePatterns": [
+      "<rootDir>/build/",
+      "/node_modules/"
+    ]
+  }
+}
