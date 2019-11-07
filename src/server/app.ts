@@ -1,20 +1,18 @@
 'use strict'
 
-import path from 'path'
-
 import compression from 'compression'
 import express from 'express'
 
 import router from './router'
 
-export default function app (options: { isProd?: boolean, projectRoot?: string } = {}) {
+export default function app (
+  options: { isProd?: boolean; projectRoot?: string } = {}
+) {
   const app = express()
 
   app.disable('x-powered-by')
 
   app.use(compression())
-
-  app.use(express.static(path.join(options.projectRoot || '.', 'public')))
 
   app.use(router(options))
 
