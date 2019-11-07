@@ -10,7 +10,7 @@ const entry = {
 
 const output = {
   filename: '[name].js',
-  libraryTarget: 'commonjs2',
+  chunkFilename: '[name].js',
   path: path.resolve(__dirname, 'build')
 }
 
@@ -26,6 +26,10 @@ const resolve = {
     '.yml',
     '.json'
   ]
+}
+
+const watchOptions = {
+  ignored: /[\\/]node_modules[\\/]/
 }
 
 const buildArtifact = path.resolve(output.path, Object.keys(entry)[0])
@@ -85,12 +89,13 @@ module.exports = (_, argv) => {
           }
         ]
       },
-      output,
+      output: {
+        ...output,
+        libraryTarget: 'commonjs2'
+      },
       resolve,
       target: 'node',
-      watchOptions: {
-        ignored: /[\\/]node_modules[\\/]/
-      },
+      watchOptions,
       // the following are set to enable proper server-side source-map error logging
       devtool: 'source-map',
       mode: 'development',
