@@ -143,10 +143,11 @@ module.exports = (_, argv) => {
             require(buildArtifact).app(env)(req, res, next)
           })
         },
-        contentBase: '/dist/',
+        contentBase: '/',
         host: '0.0.0.0',
         index: '',
         port: env.port,
+        publicPath: '/dist/',
         writeToDisk: true
       },
       entry,
@@ -223,9 +224,8 @@ module.exports = (_, argv) => {
         }
       },
       output: {
-        filename: '[name].js',
-        chunkFilename: '[name].js',
-        path: path.join(env.projectRoot, 'dist'),
+        ...output,
+        path: path.join(output.path, 'dist'),
         publicPath: '/dist/'
       },
       plugins: [
@@ -277,9 +277,8 @@ module.exports = (_, argv) => {
         ]
       },
       output: {
-        filename: '[name].js',
-        chunkFilename: '[name].js',
-        path: path.join(env.projectRoot, 'dist')
+        ...output,
+        path: path.join(output.path, 'dist'),
       },
       plugins: [
         new MiniCssExtractPlugin({
@@ -287,7 +286,7 @@ module.exports = (_, argv) => {
           chunkFilename: '[name].css'
         }),
         new OnBuildPlugin(async (stats) => {
-          return exec(`rm -rf ${path.join(env.projectRoot, 'dist', 'site.js')}`)
+          return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js')}`)
         })
       ],
       resolve,
