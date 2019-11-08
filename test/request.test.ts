@@ -7,7 +7,7 @@ import request from 'supertest'
 import app from '../src/server/app'
 
 test('200', () => {
-  return request(app({}))
+  return request(app({ auth: null }))
     .get('/api/uri')
     .expect(200)
     .expect('Content-Type', /^application\/json(;|$)/)
