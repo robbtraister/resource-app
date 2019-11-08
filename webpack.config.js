@@ -302,7 +302,7 @@ module.exports = (_, argv) => {
         errors: false,
         warnings: false
       },
-      target: 'node',
+      target: 'web',
       watchOptions
     }
   ]

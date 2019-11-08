@@ -39,9 +39,12 @@ export default function (options) {
   })
 
   router.use((req, res, next) => {
-    res.sendFile(path.join(options.projectRoot, 'dist', 'index.html'), err => {
-      err && next()
-    })
+    res.sendFile(
+      path.join(options.projectRoot, 'build', 'dist', 'index.html'),
+      err => {
+        err && next()
+      }
+    )
   })
 
   return router
