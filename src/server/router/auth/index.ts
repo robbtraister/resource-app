@@ -37,7 +37,8 @@ export default function router (options: Options) {
 
     router.use(passport.initialize({}))
 
-    options.auth.providers.facebook && router.use('/auth/facebook', facebook(options))
+    options.auth.providers.facebook &&
+      router.use('/auth/facebook', facebook(options))
     options.auth.providers.google && router.use('/auth/google', google(options))
 
     router.use(jwt(options))
