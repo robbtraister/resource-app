@@ -4,7 +4,7 @@ const path = require('path')
 
 const { config = {} } = require('./package.json')
 
-require('dotenv').config({ path: path.join(__dirname, '.env') })
+require('dotenv').config({ path: path.resolve('./.env') })
 
 const facebook = process.env.FACEBOOK_APP_ID
   ? {
