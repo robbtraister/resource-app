@@ -4,7 +4,7 @@ import path from 'path'
 
 import express from 'express'
 
-export default function router (options) {
+export default function router (options: Options) {
   const publicRoot = path.resolve(options.projectRoot || '.', 'public')
 
   const assetRouter = express()
@@ -12,7 +12,9 @@ export default function router (options) {
   assetRouter.all(
     '/favicon.ico',
     express.static(publicRoot),
-    (req, res, next) => { res.sendStatus(404) }
+    (req, res, next) => {
+      res.sendStatus(404)
+    }
   )
   assetRouter.use(express.static(publicRoot))
 
