@@ -73,7 +73,7 @@ export default async function renderSite ({
           return styles[key]
         }
         promises.push(
-          readFile(path.join(projectRoot, 'dist', `${key}.css`))
+          readFile(path.join(projectRoot, 'build', 'dist', `${key}.css`))
             .then(data => {
               styles[key] = (
                 <style
