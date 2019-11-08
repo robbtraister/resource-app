@@ -75,12 +75,10 @@
     },
     "testPathIgnorePatterns": [
       "<rootDir>/build/",
-      "<rootDir>/dist/",
       "/node_modules/"
     ],
     "watchPathIgnorePatterns": [
       "<rootDir>/build/",
-      "<rootDir>/dist/",
       "/node_modules/"
     ]
   }

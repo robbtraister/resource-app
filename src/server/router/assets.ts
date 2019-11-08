@@ -14,7 +14,13 @@ export default function router (options) {
     express.static(publicRoot),
     (req, res, next) => { res.sendStatus(404) }
   )
-  assetRouter.use('/dist', express.static(path.resolve(options.projectRoot || '.', 'dist')))
+
+  assetRouter.use(
+    '/dist',
+    express.static(path.resolve(options.projectRoot || '.', 'build', 'dist')),
+    (req, res, next) => { res.sendStatus(404) }
+  )
+
   assetRouter.use(express.static(publicRoot))
 
   return assetRouter
