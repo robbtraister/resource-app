@@ -13,11 +13,11 @@ const JWT_NAME = 'jwt'
 export function authenticate (
   strategy: string,
   options: {
-    cookie: string;
-    secret: string;
-    scope?: string[];
-    state?: string;
-    successRedirect?: any;
+    cookie: string
+    secret: string
+    scope?: string[]
+    state?: string
+    successRedirect?: any
   }
 ) {
   const { cookie, secret } = options
