@@ -1,9 +1,9 @@
 interface Options {
   app?: {
-    fileLimit?: number;
-    id?: string;
-    title?: string;
-  };
+    fileLimit?: number
+    id?: string
+    title?: string
+  }
   auth?: {
     cookie: string
     secret: string
