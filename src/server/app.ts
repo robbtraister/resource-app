@@ -5,16 +5,16 @@ import express from 'express'
 
 import router from './router'
 
-export default function app (
-  options: { isProd?: boolean; projectRoot?: string } = {}
-) {
+import env from '~/env'
+
+export default function app (options: Options = {}) {
   const app = express()
 
   app.disable('x-powered-by')
 
   app.use(compression())
 
-  app.use(router(options))
+  app.use(router(Object.assign({}, env, options)))
 
   app.use(
     (err, req, res, next) => {

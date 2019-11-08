@@ -5,19 +5,20 @@ import cluster from 'cluster'
 import 'source-map-support/register'
 
 import app from './app'
-import * as env from '../../env'
+
+import * as env from '~/env'
 
 export { app }
 
-export default function server (options: { port?: number } = {}) {
+export default function server (options: Options = {}) {
   const port = Number(options.port) || env.port
 
-  return app(Object.assign({}, env, options)).listen(port, err =>
+  return app(options).listen(port, err =>
     err ? console.error(err) : console.log(`Listening on port: ${port}`)
   )
 }
 
-function main (options: { port?: number; workerCount?: number } = {}) {
+function main (options: Options = {}) {
   if (cluster.isMaster) {
     const workerCount = Number(options.workerCount) || env.workerCount
 
