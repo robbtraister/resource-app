@@ -67,15 +67,15 @@ export default async function renderSite ({
 
   const styles = {}
   const Styles = ({ inline, ...props }) => {
-    const getStyleTag = inline
-      ? key => {
-        if (key in styles) {
-          return styles[key]
+    const Style = inline
+      ? ({ name }) => {
+        if (name in styles) {
+          return styles[name]
         }
         promises.push(
-          readFile(path.join(projectRoot, 'build', 'dist', `${key}.css`))
+          readFile(path.join(projectRoot, 'build', 'dist', `${name}.css`))
             .then(data => {
-              styles[key] = (
+              styles[name] = (
                 <style
                   {...props}
                   dangerouslySetInnerHTML={{ __html: data }}
@@ -83,23 +83,25 @@ export default async function renderSite ({
               )
             })
             .catch(() => {
-              styles[key] = null
+              styles[name] = null
             })
         )
       }
-      : key => (
+      : ({ name }) => (
         <link
           {...props}
-          key={key}
+          key={name}
           rel='stylesheet'
           type='text/css'
-          href={`/dist/${key}.css`}
+          href={`/dist/${name}.css`}
         />
       )
 
-    return ['site', 'app']
-      .map(getStyleTag)
-      .concat(React.createElement(STYLED_COMPONENTS_PLACEHOLDER))
+    return <>
+      <Style name='site' />
+      <Style name='app' />
+      <STYLED_COMPONENTS_PLACEHOLDER />
+    </>
   }
 
   const AppWrapper = ({ appId: propId, static: isStatic, ...props }) => (

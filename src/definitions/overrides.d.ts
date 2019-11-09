@@ -3,3 +3,9 @@ declare namespace Express {
     user?: object
   }
 }
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'styled-components': any
+  }
+}
