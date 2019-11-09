@@ -4,10 +4,10 @@ services:
   server:
     build:
       dockerfile: dev.Dockerfile
+    env_file: .env
     ports:
       - 9229:9229
     volumes:
       # - ./build:/opt/nodejs/build:rw
-      # - ./dist:/opt/nodejs/dist:rw
       - ./public:/opt/nodejs/public:ro
       - ./src:/opt/nodejs/src:ro
