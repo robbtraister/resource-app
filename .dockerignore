@@ -6,8 +6,8 @@
 .dockerignore
 .gitignore
 .npmrc
-docker-compose.yml
-Dockerfile
+docker-compose*.yml
+*Dockerfile
 
 build/
 dist/
