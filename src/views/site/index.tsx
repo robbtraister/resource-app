@@ -2,9 +2,13 @@
 
 import React from 'react'
 
-const Site = ({ App, Styles }) => (
+import './styles.scss'
+
+const Site = ({ title, App, Styles }) => (
   <html>
     <head>
+      <title>{title}</title>
+      <meta name='viewport' content='width=device-width' />
       <Styles />
     </head>
     <body>
