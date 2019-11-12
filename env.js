@@ -1,5 +1,7 @@
 'use strict'
 
+const DISABLED = /^(disabled?|false|null|off)$/
+
 const path = require('path')
 
 const { config = {} } = require('./package.json')
@@ -45,7 +47,7 @@ module.exports = {
       ''
   },
 
-  auth: /^(disabled?|false|off)$/i.test(process.env.AUTH)
+  auth: DISABLED.test(process.env.AUTH)
     ? null
     : {
       cookie:
@@ -63,6 +65,11 @@ module.exports = {
     process.env.HOST ||
     config.host ||
     `http://localhost:${port}`,
+
+  isPreact: !(
+    DISABLED.test(process.env.PREACT) ||
+    [false, null].includes(config.preact)
+  ),
 
   isProd,
 

@@ -261,7 +261,7 @@ module.exports = (_, argv) => {
       ],
       resolve: {
         ...resolve,
-        alias: (isProd)
+        alias: (isProd && env.isPreact)
           ? {
             ...resolve.alias,
             react: 'preact/compat',
