@@ -261,11 +261,13 @@ module.exports = (_, argv) => {
       ],
       resolve: {
         ...resolve,
-        alias: {
-          ...resolve.alias,
-          react: 'preact/compat',
-          'react-dom': 'preact/compat'
-        }
+        alias: (isProd)
+          ? {
+            ...resolve.alias,
+            react: 'preact/compat',
+            'react-dom': 'preact/compat'
+          }
+          : resolve.alias
       },
       target: 'web',
       watchOptions
