@@ -78,6 +78,9 @@ const rules = ({ isProd, extractCss }) => [
         loader: 'css-loader',
         options: {
           modules: {
+            localIdentName: (isProd)
+              ? '[hash:base64]'
+              : '[path][name]__[local]',
             mode: 'local'
           },
           onlyLocals: !extractCss,
