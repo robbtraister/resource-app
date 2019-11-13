@@ -13,9 +13,5 @@ export default function router (options) {
     res.send({ uri: req.originalUrl })
   })
 
-  apiRouter.use((req, res, next) => {
-    res.sendStatus(404)
-  })
-
   return apiRouter
 }
