@@ -19,16 +19,12 @@ export default function router (options: Options) {
   // don't serve under '/auth' because we need to run authorization on all endpoints
   router.use(auth(options))
 
-  router.use('/api',
-    csurf({ cookie: true }),
-    api(options)
-  )
+  router.use('/api', csurf({ cookie: true }), api(options))
 
   // reserved paths that should not be rendered
-  router.use(
-    ['/api', '/gql'],
-    (req, res, next) => { res.sendStatus(404) }
-  )
+  router.use(['/api', '/gql'], (req, res, next) => {
+    res.sendStatus(404)
+  })
 
   router.use(render(options))
 
