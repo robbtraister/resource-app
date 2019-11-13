@@ -1,6 +1,5 @@
 'use strict'
 
-import cookieParser from 'cookie-parser'
 import jsonwebtoken from 'jsonwebtoken'
 import passport from 'passport'
 import { Strategy as JwtStrategy } from 'passport-jwt'
@@ -68,5 +67,5 @@ export default (options: Options) => {
     )
   )
 
-  return [cookieParser(), authenticate(JWT_NAME, options.auth)]
+  return authenticate(JWT_NAME, options.auth)
 }

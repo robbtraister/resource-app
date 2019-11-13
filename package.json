@@ -17,6 +17,24 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.4",
+    "csurf": "^1.10.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-router-dom": "^5.1.2",
+    "source-map-support": "^0.5.16"
+  },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-decorators": "^7.7.0",
@@ -33,36 +51,23 @@
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "babel-loader": "^8.0.6",
-    "compression": "^1.7.4",
-    "cookie-parser": "^1.4.4",
     "core-js": "^3.4.0",
     "css-loader": "^3.2.0",
-    "debug": "^4.1.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.0.9",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "json-loader": "^0.5.7",
-    "jsonwebtoken": "^8.5.1",
+    "lint-staged": "^9.4.2",
     "mini-css-extract-plugin": "^0.8.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "passport": "^0.4.0",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-jwt": "^4.0.0",
     "preact": "^10.0.4",
     "prettier-standard": "^15.0.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-router-dom": "^5.1.2",
     "react-svg-loader": "^3.0.3",
     "sass": "^1.23.3",
     "sass-loader": "^8.0.0",
     "script-ext-html-webpack-plugin": "^2.1.4",
-    "source-map-support": "^0.5.16",
     "standard": "^14.3.1",
     "styled-components": "^4.4.1",
     "supertest": "^4.0.2",
@@ -77,6 +82,11 @@
     "whatwg-fetch": "^3.0.0",
     "yaml-loader": "^0.5.0"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less|scss|sass)$": "identity-obj-proxy",
@@ -89,6 +99,12 @@
     "watchPathIgnorePatterns": [
       "<rootDir>/build/",
       "/node_modules/"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts}": [
+      "npm run lint",
+      "git add"
     ]
   }
 }
