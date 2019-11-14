@@ -203,7 +203,13 @@ module.exports = (_, argv) => {
         : 'eval-source-map',
       entry: {
         app: path.resolve(__dirname, 'src', 'client', 'engine'),
-        polyfill: path.resolve(__dirname, 'src', 'client', 'polyfill')
+        polyfills: path.resolve(__dirname, 'src', 'client', 'polyfills'),
+        'polyfills/assign': 'core-js/features/object/assign',
+        'polyfills/fetch': 'whatwg-fetch',
+        'polyfills/includes': 'core-js/features/array/includes',
+        'polyfills/map': 'core-js/features/map',
+        'polyfills/promise': 'core-js/features/promise',
+        'polyfills/set': 'core-js/features/set'
       },
       mode,
       module: {

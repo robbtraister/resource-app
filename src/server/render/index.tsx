@@ -23,13 +23,17 @@ const STYLED_COMPONENTS_PATTERN = new RegExp(
 )
 
 const Script = ({ name }) => (
-  <script
-    defer
-    key={name}
-    type='application/javascript'
-    src={`/dist/${name}.js`}
-  />
+  <script defer type='application/javascript' src={`/dist/${name}.js`} />
 )
+
+const polyfills = {
+  assign: '(window.Object&&window.Object.assign)',
+  fetch: 'window.fetch',
+  includes: 'Array.prototype.includes',
+  map: 'window.Map',
+  promise: 'window.Promise',
+  set: 'window.Set'
+}
 
 export default async function renderSite ({
   appId,
@@ -52,16 +56,27 @@ export default async function renderSite ({
 
   const Libs = () => (
     <>
-      <Script name='runtime' />
       <script
-        key='polyfill'
         dangerouslySetInnerHTML={{
           __html:
-            'if(!Array.prototype.includes||!(window.Object&&Object.assign)||!window.Map||!window.Promise||!window.Set||!window.fetch){document.write(\'<script type="application/javascript" src="/dist/polyfill.js" defer=""><\\/script>\')}'
+            // Object.keys(polyfills)
+            //   .map(
+            //     polyfill =>
+            //       `if(!${
+            //         polyfills[polyfill]
+            //       })document.write('<script type="application/javascript src="/dist/polyfills/${polyfill}.js" defer=""><\\/script>');`
+            //   )
+            //   .join('')
+            `if(${Object.values(polyfills)
+              .map(p => `!${p}`)
+              .join(
+                '||'
+              )})document.write('<script type="application/javascript" src="/dist/polyfills.js" defer=""><\\/script>');`
         }}
       />
+      <Script name='runtime' />
       <Script name='app' />
-      <script defer key='user' src='/auth/user?jsonp=setUser' />
+      <script src='/auth/user?jsonp=setUser' defer />
     </>
   )
 
@@ -90,7 +105,6 @@ export default async function renderSite ({
       : ({ name }) => (
         <link
           {...props}
-          key={name}
           rel='stylesheet'
           type='text/css'
           href={`/dist/${name}.css`}
@@ -108,8 +122,8 @@ export default async function renderSite ({
 
   const AppWrapper = ({ appId: propId, static: isStatic, ...props }) => (
     <>
-      {!isStatic && <Libs key='libs' />}
-      <div id={propId || appId} key='app'>
+      {!isStatic && <Libs />}
+      <div id={propId || appId}>
         <StaticRouter context={context} location={location}>
           <App {...props} user={user} store={store} />
         </StaticRouter>
