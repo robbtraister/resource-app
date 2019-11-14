@@ -7,10 +7,11 @@ import Router from './router'
 
 import userContext from './contexts/user'
 
-const App = ({ user, store }) =>
+const App = ({ user, store }) => (
   <userContext.Provider value={user}>
     <Router />
   </userContext.Provider>
+)
 
 App.propTypes = {
   user: PropTypes.any,
