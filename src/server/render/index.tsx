@@ -101,6 +101,7 @@ export default async function renderSite ({
               styles[name] = null
             })
         )
+        return null
       }
       : ({ name }) => (
         <link
