@@ -16,9 +16,9 @@ import Site from '~/src/views/site'
 
 const Store = ({ user, location }) => ({})
 
-const STYLED_COMPONENTS_PLACEHOLDER = 'styled-components'
+const StyledComponents = 'styled-components'
 const STYLED_COMPONENTS_PATTERN = new RegExp(
-  `<${STYLED_COMPONENTS_PLACEHOLDER}></${STYLED_COMPONENTS_PLACEHOLDER}>`,
+  `<${StyledComponents}></${StyledComponents}>`,
   'g'
 )
 
@@ -97,11 +97,13 @@ export default async function renderSite ({
         />
       )
 
-    return <>
-      <Style name='site' />
-      <Style name='app' />
-      <STYLED_COMPONENTS_PLACEHOLDER />
-    </>
+    return (
+      <>
+        <Style name='site' />
+        <Style name='app' />
+        <StyledComponents />
+      </>
+    )
   }
 
   const AppWrapper = ({ appId: propId, static: isStatic, ...props }) => (
