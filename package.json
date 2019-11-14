@@ -102,8 +102,13 @@
     ]
   },
   "lint-staged": {
-    "src/**/*.{js,ts,jsx,tsx}": [
-      "npm run lint",
+    "src/!(definitions)/**/*.{js,ts,jsx,tsx}": [
+      "prettier-standard",
+      "standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin",
+      "git add"
+    ],
+    "src/definitions/**/*.{js,ts,jsx,tsx}": [
+      "prettier-standard",
       "git add"
     ]
   }
