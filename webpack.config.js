@@ -17,11 +17,11 @@ const env = require('./env')
 const exec = promisify(childProcess.exec.bind(childProcess))
 
 class OnBuildPlugin {
-  constructor (fn) {
+  constructor(fn) {
     this.fn = fn
   }
 
-  apply (compiler) {
+  apply(compiler) {
     compiler.hooks.done.tap('OnBuildPlugin', this.fn)
   }
 }
@@ -64,7 +64,7 @@ const rules = ({ isProd, extractCss }) => [
       options: {
         fallback: 'file-loader',
         limit: env.fileLimit,
-        name: (isProd)
+        name: isProd
           ? 'dist/assets/[hash].[ext]'
           : 'dist/assets/[path][name].[ext]',
         publicPath: '/'
@@ -73,20 +73,17 @@ const rules = ({ isProd, extractCss }) => [
   },
   {
     test: /\.s?[ac]ss$/,
-    use: (extractCss ? [{ loader: MiniCssExtractPlugin.loader }] : [])
-      .concat({
-        loader: 'css-loader',
-        options: {
-          modules: {
-            localIdentName: (isProd)
-              ? '[hash:base64]'
-              : '[path][name]__[local]',
-            mode: 'local'
-          },
-          onlyLocals: !extractCss,
-          sourceMap: true
-        }
-      })
+    use: (extractCss ? [{ loader: MiniCssExtractPlugin.loader }] : []).concat({
+      loader: 'css-loader',
+      options: {
+        modules: {
+          localIdentName: isProd ? '[hash:base64]' : '[path][name]__[local]',
+          mode: 'local'
+        },
+        onlyLocals: !extractCss,
+        sourceMap: true
+      }
+    })
   },
   {
     test: /\.s[ac]ss$/,
@@ -104,17 +101,11 @@ const rules = ({ isProd, extractCss }) => [
   {
     test: /\.m?[jt]sx?$/,
     exclude: /[\\/]node_modules[\\/]/,
-    use: [
-      'babel-loader'
-    ]
+    use: ['babel-loader']
   },
   {
     test: /\.svg$/,
-    use: [
-      'babel-loader',
-      'react-svg-loader',
-      'svgo-loader'
-    ]
+    use: ['babel-loader', 'react-svg-loader', 'svgo-loader']
   }
 ]
 
@@ -125,17 +116,15 @@ const watchOptions = {
 const buildArtifact = path.resolve(output.path, Object.keys(entry)[0])
 
 module.exports = (_, argv) => {
-  const isProd = (env.isProd || /^prod/i.test(argv.mode))
+  const isProd = env.isProd || /^prod/i.test(argv.mode)
 
-  const mode = (isProd)
-    ? 'production'
-    : 'development'
+  const mode = isProd ? 'production' : 'development'
 
   return [
     {
       name: 'server',
       devServer: {
-        before: (app) => {
+        before: app => {
           app.use(/^(?!\/dist\/)/, (req, res, next) => {
             Object.keys(require.cache)
               .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
@@ -155,7 +144,7 @@ module.exports = (_, argv) => {
       },
       entry,
       externals: [
-        function (context, request, callback) {
+        function(context, request, callback) {
           if (isProd) {
             return callback()
           }
@@ -181,7 +170,7 @@ module.exports = (_, argv) => {
           __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
           __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
           'typeof window': JSON.stringify(undefined)
-        }),
+        })
       ],
       resolve,
       target: 'node',
@@ -198,9 +187,7 @@ module.exports = (_, argv) => {
     },
     {
       name: 'client',
-      devtool: (isProd)
-        ? 'hidden-source-map'
-        : 'eval-source-map',
+      devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
       entry: {
         app: path.resolve(__dirname, 'src', 'client', 'engine'),
         polyfills: path.resolve(__dirname, 'src', 'client', 'polyfills'),
@@ -267,13 +254,14 @@ module.exports = (_, argv) => {
       ],
       resolve: {
         ...resolve,
-        alias: (isProd && env.isPreact)
-          ? {
-            ...resolve.alias,
-            react: 'preact/compat',
-            'react-dom': 'preact/compat'
-          }
-          : resolve.alias
+        alias:
+          isProd && env.isPreact
+            ? {
+                ...resolve.alias,
+                react: 'preact/compat',
+                'react-dom': 'preact/compat'
+              }
+            : resolve.alias
       },
       target: 'web',
       watchOptions
@@ -290,20 +278,18 @@ module.exports = (_, argv) => {
         rules: rules({ isProd, extractCss: true })
       },
       optimization: {
-        minimizer: [
-          new OptimizeCSSAssetsWebpackPlugin({})
-        ]
+        minimizer: [new OptimizeCSSAssetsWebpackPlugin({})]
       },
       output: {
         ...output,
-        path: path.join(output.path, 'dist'),
+        path: path.join(output.path, 'dist')
       },
       plugins: [
         new MiniCssExtractPlugin({
           filename: '[name].css',
           chunkFilename: '[name].css'
         }),
-        new OnBuildPlugin(async (stats) => {
+        new OnBuildPlugin(async stats => {
           return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js')}`)
         })
       ],

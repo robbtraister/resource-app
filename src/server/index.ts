@@ -10,7 +10,7 @@ import * as env from '~/env'
 
 export { app }
 
-export default function server (options: Options = {}) {
+export default function server(options: Options = {}) {
   const port = Number(options.port) || env.port
 
   return app(options).listen(port, err =>
@@ -18,7 +18,7 @@ export default function server (options: Options = {}) {
   )
 }
 
-function main (options: Options = {}) {
+function main(options: Options = {}) {
   if (cluster.isMaster) {
     const workerCount = Number(options.workerCount) || env.workerCount
 

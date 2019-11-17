@@ -3,7 +3,7 @@
 export default class Unauthenticated extends Error {
   statusCode: number
 
-  constructor () {
+  constructor() {
     super('Unauthenticated')
     this.statusCode = 401
   }

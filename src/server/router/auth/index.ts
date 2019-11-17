@@ -9,15 +9,15 @@ import jwt from './jwt'
 
 import { Redirect, Unauthenticated } from '../../errors'
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
   done(null, JSON.stringify(user))
 })
 
-passport.deserializeUser(function (token, done) {
+passport.deserializeUser(function(token, done) {
   done(null, JSON.parse(token))
 })
 
-export default function router (options: Options) {
+export default function router(options: Options) {
   const router = Router()
 
   if (!options.auth) {

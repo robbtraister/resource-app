@@ -10,65 +10,50 @@ require('dotenv').config({ path: path.resolve('./.env') })
 
 const facebook = process.env.FACEBOOK_APP_ID
   ? {
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET
-  }
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET
+    }
   : null
 
 const google = process.env.GOOGLE_CLIENT_ID
   ? {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET
-  }
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }
   : null
 
 const isProd = /^prod/i.test(process.env.NODE_ENV)
 
-const port =
-  Number(process.env.PORT) ||
-  Number(config.port) ||
-  8080
+const port = Number(process.env.PORT) || Number(config.port) || 8080
 
 module.exports = {
   app: {
     fileLimit:
-      Number(process.env.FILE_LIMIT) ||
-      Number(config.fileLimit) ||
-      16 * 1024,
+      Number(process.env.FILE_LIMIT) || Number(config.fileLimit) || 16 * 1024,
 
-    id:
-      process.env.APP_ID ||
-      (config.app && config.app.id) ||
-      'app',
+    id: process.env.APP_ID || (config.app && config.app.id) || 'app',
 
-    title:
-      process.env.APP_TITLE ||
-      (config.app && config.app.title) ||
-      ''
+    title: process.env.APP_TITLE || (config.app && config.app.title) || ''
   },
 
   auth: DISABLED.test(process.env.AUTH)
     ? null
     : {
-      cookie:
+        cookie:
           process.env.COOKIE ||
           (config.auth && config.auth.cookie) ||
           'jwt-token',
-      secret: process.env.SECRET,
-      providers: {
-        facebook,
-        google
-      }
-    },
+        secret: process.env.SECRET,
+        providers: {
+          facebook,
+          google
+        }
+      },
 
-  host:
-    process.env.HOST ||
-    config.host ||
-    `http://localhost:${port}`,
+  host: process.env.HOST || config.host || `http://localhost:${port}`,
 
   isPreact: !(
-    DISABLED.test(process.env.PREACT) ||
-    [false, null].includes(config.preact)
+    DISABLED.test(process.env.PREACT) || [false, null].includes(config.preact)
   ),
 
   isProd,
@@ -77,10 +62,9 @@ module.exports = {
 
   projectRoot: path.resolve('.'),
 
-  workerCount:
-    (isProd)
-      ? Number(process.env.WORKER_COUNT) ||
-        Number(config.workerCount) ||
-        require('os').cpus().length
-      : 1
+  workerCount: isProd
+    ? Number(process.env.WORKER_COUNT) ||
+      Number(config.workerCount) ||
+      require('os').cpus().length
+    : 1
 }

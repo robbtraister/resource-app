@@ -25,7 +25,7 @@ export default (options: Options) => {
           ...facebook,
           callbackURL: `${host}/auth/facebook`
         },
-        function (accessToken, refreshToken, profile, done) {
+        function(accessToken, refreshToken, profile, done) {
           done(null, {
             email: profile.email,
             name: profile.name.givenName || profile.displayName
