@@ -6,11 +6,12 @@
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
     "dev": "npm run clean && node --inspect=0.0.0.0:9229 ./node_modules/.bin/webpack-dev-server",
-    "lint:ts": "eslint --ext .js,.jsx,.ts,.tsx",
-    "lint": "npm run lint:ts -- --fix .",
+    "lint:css": "prettier **/*.{css,sass,scss}",
+    "lint:ts": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint": "npm run lint:ts -- --fix && npm run lint:css -- --write",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node ./build/server",
-    "test": "tsc --noEmit && npm run lint:ts -- . && jest",
+    "test": "tsc --noEmit && npm run lint:ts && npm run lint:css -- --check && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
@@ -114,8 +115,12 @@
     ]
   },
   "lint-staged": {
+    "**/*.{css,sass,scss}": [
+      "prettier",
+      "git add"
+    ],
     "**/*.{js,jsx,ts,tsx}": [
-      "npm run lint:ts -- --fix",
+      "eslint --fix",
       "git add"
     ]
   },
