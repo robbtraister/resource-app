@@ -1,5 +1,7 @@
 'use strict'
 
+/* global test */
+
 import assert from 'assert'
 
 import request from 'supertest'

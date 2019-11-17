@@ -18,14 +18,7 @@ const resolve = {
   alias: {
     '~': __dirname
   },
-  extensions: [
-    '.ts',
-    '.mjs',
-    '.js',
-    '.yaml',
-    '.yml',
-    '.json'
-  ]
+  extensions: ['.ts', '.mjs', '.js', '.yaml', '.yml', '.json']
 }
 
 const watchOptions = {
@@ -35,13 +28,13 @@ const watchOptions = {
 const buildArtifact = path.resolve(output.path, Object.keys(entry)[0])
 
 module.exports = (_, argv) => {
-  const isProd = (env.isProd || /^prod/i.test(argv.mode))
+  const isProd = env.isProd || /^prod/i.test(argv.mode)
 
   return [
     {
       name: 'server',
       devServer: {
-        before: (app) => {
+        before: app => {
           app.use((req, res, next) => {
             Object.keys(require.cache)
               .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
@@ -59,7 +52,7 @@ module.exports = (_, argv) => {
       },
       entry,
       externals: [
-        function (context, request, callback) {
+        function(context, request, callback) {
           if (isProd) {
             return callback()
           }
@@ -83,9 +76,7 @@ module.exports = (_, argv) => {
           {
             test: /\.m?[jt]sx?$/,
             exclude: /[\\/]node_modules[\\/]/,
-            use: [
-              'babel-loader'
-            ]
+            use: ['babel-loader']
           }
         ]
       },

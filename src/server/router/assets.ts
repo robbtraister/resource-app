@@ -4,7 +4,7 @@ import path from 'path'
 
 import express from 'express'
 
-export default function router (options: Options) {
+export default function router(options: Options) {
   const publicRoot = path.resolve(options.projectRoot || '.', 'public')
 
   const assetRouter = express()

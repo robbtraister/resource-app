@@ -6,10 +6,11 @@
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
     "dev": "npm run clean && node --inspect=0.0.0.0:9229 ./node_modules/.bin/webpack-dev-server",
-    "lint": "prettier-standard 'src/**/*.{js,ts}' && standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts}'",
+    "lint:ts": "eslint --ext .js,.ts",
+    "lint": "npm run lint:ts -- --fix .",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node ./build/server",
-    "test": "tsc --noEmit && standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts}' && jest",
+    "test": "tsc --noEmit && npm run lint:ts -- . && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
@@ -40,16 +41,24 @@
     "@babel/preset-typescript": "^7.7.2",
     "@babel/runtime": "^7.7.2",
     "@types/express": "^4.17.2",
-    "@types/jest": "^24.0.22",
+    "@types/jest": "^24.0.23",
     "@types/supertest": "^2.0.8",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
     "babel-loader": "^8.0.6",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
-    "lint-staged": "^9.4.2",
-    "prettier-standard": "^15.0.1",
-    "standard": "^14.3.1",
+    "lint-staged": "^9.4.3",
+    "prettier": "^1.19.1",
+    "prettier-config-standard": "^1.0.1",
     "supertest": "^4.0.2",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
@@ -75,9 +84,10 @@
     ]
   },
   "lint-staged": {
-    "src/**/*.{js,ts}": [
-      "npm run lint",
+    "**/*.{js,ts}": [
+      "npm run lint:ts -- --fix",
       "git add"
     ]
-  }
+  },
+  "prettier": "prettier-config-standard"
 }
