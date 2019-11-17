@@ -6,10 +6,11 @@
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
     "dev": "npm run clean && node --inspect=0.0.0.0:9229 ./node_modules/.bin/webpack-dev-server",
-    "lint": "prettier-standard 'src/**/*.{js,ts,jsx,tsx}' && standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts,jsx,tsx}'",
+    "lint:ts": "eslint --ext .js,.jsx,.ts,.tsx",
+    "lint": "npm run lint:ts -- --fix .",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node ./build/server",
-    "test": "tsc --noEmit && standard --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin 'src/!(definitions)/**/*.{js,ts,jsx,tsx}' && jest",
+    "test": "tsc --noEmit && npm run lint:ts -- . && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
@@ -30,8 +31,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "prop-types": "^15.7.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "source-map-support": "^0.5.16"
   },
@@ -45,26 +46,36 @@
     "@babel/preset-typescript": "^7.7.2",
     "@babel/runtime": "^7.7.2",
     "@types/express": "^4.17.2",
-    "@types/jest": "^24.0.22",
+    "@types/jest": "^24.0.23",
     "@types/react": "^16.9.11",
     "@types/supertest": "^2.0.8",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
     "babel-loader": "^8.0.6",
-    "core-js": "^3.4.0",
+    "core-js": "^3.4.1",
     "css-loader": "^3.2.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.6.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.9",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "json-loader": "^0.5.7",
-    "lint-staged": "^9.4.2",
+    "lint-staged": "^9.4.3",
     "mini-css-extract-plugin": "^0.8.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "prettier-standard": "^15.0.1",
+    "prettier": "^1.19.1",
+    "prettier-config-standard": "^1.0.1",
     "react-svg-loader": "^3.0.3",
-    "sass": "^1.23.3",
+    "sass": "^1.23.6",
     "sass-loader": "^8.0.0",
     "script-ext-html-webpack-plugin": "^2.1.4",
     "standard": "^14.3.1",
@@ -101,14 +112,10 @@
     ]
   },
   "lint-staged": {
-    "src/!(definitions)/**/*.{js,ts,jsx,tsx}": [
-      "prettier-standard",
-      "standard --fix --parser @typescript-eslint/parser --plugin @typescript-eslint/eslint-plugin",
-      "git add"
-    ],
-    "src/definitions/**/*.{js,ts,jsx,tsx}": [
-      "prettier-standard",
+    "**/*.{js,jsx,ts,tsx}": [
+      "npm run lint:ts -- --fix",
       "git add"
     ]
-  }
+  },
+  "prettier": "prettier-config-standard"
 }

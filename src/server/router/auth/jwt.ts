@@ -9,7 +9,7 @@ import { Redirect } from '../../errors'
 const algorithm = 'HS512'
 const JWT_NAME = 'jwt'
 
-export function authenticate (
+export function authenticate(
   strategy: string,
   options: {
     cookie: string
@@ -24,8 +24,8 @@ export function authenticate (
   const successRedirect = !options.successRedirect
     ? null
     : options.successRedirect instanceof Function
-      ? options.successRedirect
-      : () => options.successRedirect
+    ? options.successRedirect
+    : () => options.successRedirect
 
   return (req, res, next) => {
     if (req.user) {
@@ -61,7 +61,7 @@ export default (options: Options) => {
           req && req.cookies && req.cookies[options.auth.cookie],
         algorithms: [algorithm]
       },
-      function (payload, done) {
+      function(payload, done) {
         done(null, payload.usr)
       }
     )

@@ -6,8 +6,8 @@ import express from 'express'
 
 import renderSite from '../render'
 
-export default function (options) {
-  async function render (req, res, next) {
+export default function(options) {
+  async function render(req, res, next) {
     try {
       res.send(
         await renderSite({

@@ -2,7 +2,7 @@
 
 import express from 'express'
 
-export default function router (options) {
+export default function router(options) {
   const apiRouter = express()
 
   apiRouter.use((req, res, next) => {

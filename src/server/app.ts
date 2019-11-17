@@ -7,7 +7,7 @@ import router from './router'
 
 import env from '~/env'
 
-export default function app (options: Options = {}) {
+export default function app(options: Options = {}) {
   const app = express()
 
   app.disable('x-powered-by')
@@ -36,11 +36,11 @@ export default function app (options: Options = {}) {
     },
     options.isProd
       ? (err, req, res, next) => {
-        res.sendStatus(err.statusCode || 500)
-      }
+          res.sendStatus(err.statusCode || 500)
+        }
       : (err, req, res, next) => {
-        res.status(err.statusCode || 500).send(err.message || err.body || err)
-      }
+          res.status(err.statusCode || 500).send(err.message || err.body || err)
+        }
   )
 
   return app

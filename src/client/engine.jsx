@@ -9,11 +9,11 @@ import { BrowserRouter } from 'react-router-dom'
 import App from '~/src/views/app'
 
 let user
-window.setUser = function setUser (u) {
+window.setUser = function setUser(u) {
   user = u
 }
 
-function render (
+function render(
   Component,
   targetElement = document.getElementById(__DEFAULT_APP_ID__)
 ) {

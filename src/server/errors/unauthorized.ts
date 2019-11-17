@@ -3,7 +3,7 @@
 export default class Unauthorized extends Error {
   statusCode: number
 
-  constructor () {
+  constructor() {
     super('Unauthorized')
     this.statusCode = 403
   }

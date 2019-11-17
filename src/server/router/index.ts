@@ -9,7 +9,7 @@ import assets from './assets'
 import auth from './auth'
 import render from './render'
 
-export default function router (options: Options) {
+export default function router(options: Options) {
   const router = express()
 
   router.use(assets(options))

@@ -25,7 +25,7 @@ export default (options: Options) => {
           ...google,
           callbackURL: `${host}/auth/google`
         },
-        function (accessToken, refreshToken, profile, done) {
+        function(accessToken, refreshToken, profile, done) {
           done(null, {
             email: profile.emails[0].value,
             name: profile.name.givenName

@@ -22,8 +22,22 @@ const STYLED_COMPONENTS_PATTERN = new RegExp(
   'g'
 )
 
-const Script = ({ name }) => (
-  <script defer type='application/javascript' src={`/dist/${name}.js`} />
+interface AppProps {
+  appId?: string
+  static?: boolean
+}
+interface ScriptProps {
+  name: string
+}
+interface StylesProps {
+  inline?: boolean
+}
+interface StyleProps {
+  name: string
+}
+
+const Script = ({ name }: ScriptProps) => (
+  <script defer type="application/javascript" src={`/dist/${name}.js`} />
 )
 
 const polyfills = {
@@ -35,7 +49,7 @@ const polyfills = {
   set: 'window.Set'
 }
 
-export default async function renderSite ({
+export default async function renderSite({
   appId,
   appTitle,
   location,
@@ -74,53 +88,60 @@ export default async function renderSite ({
               )})document.write('<script type="application/javascript" src="/dist/polyfills.js" defer=""><\\/script>');`
         }}
       />
-      <Script name='runtime' />
-      <Script name='app' />
-      <script src='/auth/user?jsonp=setUser' defer />
+      <Script name="runtime" />
+      <Script name="app" />
+      <script src="/auth/user?jsonp=setUser" defer />
     </>
   )
 
   const styles = {}
-  const Styles = ({ inline, ...props }) => {
+  const Styles = ({ inline, ...props }: StylesProps) => {
     const Style = inline
-      ? ({ name }) => {
-        if (name in styles) {
-          return styles[name]
+      ? function Style({ name }: StyleProps) {
+          if (name in styles) {
+            return styles[name]
+          }
+          promises.push(
+            readFile(path.join(projectRoot, 'build', 'dist', `${name}.css`))
+              .then(data => {
+                styles[name] = (
+                  <style
+                    {...props}
+                    dangerouslySetInnerHTML={{ __html: data }}
+                  />
+                )
+              })
+              .catch(() => {
+                styles[name] = null
+              })
+          )
+          return null
         }
-        promises.push(
-          readFile(path.join(projectRoot, 'build', 'dist', `${name}.css`))
-            .then(data => {
-              styles[name] = (
-                <style
-                  {...props}
-                  dangerouslySetInnerHTML={{ __html: data }}
-                />
-              )
-            })
-            .catch(() => {
-              styles[name] = null
-            })
-        )
-      }
-      : ({ name }) => (
-        <link
-          {...props}
-          rel='stylesheet'
-          type='text/css'
-          href={`/dist/${name}.css`}
-        />
-      )
+      : function Style({ name }: StyleProps) {
+          return (
+            <link
+              {...props}
+              rel="stylesheet"
+              type="text/css"
+              href={`/dist/${name}.css`}
+            />
+          )
+        }
 
     return (
       <>
-        <Style name='site' />
-        <Style name='app' />
+        <Style name="site" />
+        <Style name="app" />
         <StyledComponents />
       </>
     )
   }
 
-  const AppWrapper = ({ appId: propId, static: isStatic, ...props }) => (
+  const AppWrapper = ({
+    appId: propId,
+    static: isStatic,
+    ...props
+  }: AppProps) => (
     <>
       {!isStatic && <Libs />}
       <div id={propId || appId}>
@@ -145,13 +166,13 @@ export default async function renderSite ({
   }
 
   const sheet = new ServerStyleSheet()
-  function renderHTML () {
+  function renderHTML() {
     return ReactDOM.renderToStaticMarkup(
       sheet.collectStyles(<Site {...props} />)
     )
   }
 
-  async function renderAsync () {
+  async function renderAsync() {
     let html = renderHTML()
 
     if (promises.length) {

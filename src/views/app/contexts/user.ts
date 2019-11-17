@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react'
 
 const userContext = createContext({ name: null })
 
-function useUserContext () {
+function useUserContext() {
   return useContext(userContext)
 }
 
