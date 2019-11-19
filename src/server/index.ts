@@ -2,8 +2,6 @@
 
 import cluster from 'cluster'
 
-import 'source-map-support/register'
-
 import app from './app'
 
 import * as env from '~/env'
@@ -36,5 +34,5 @@ function main(options: Options = {}) {
 }
 
 // use eval and __filename instead of module to preserve functionality in webpack artifact
-const isScript = eval('require.main.filename === __filename') // eslint-disable-line
+const isScript = eval('require.main && (require.main.filename === __filename)') // eslint-disable-line
 isScript && main()
