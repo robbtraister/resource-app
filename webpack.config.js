@@ -5,7 +5,7 @@ const path = require('path')
 const env = require('./env')
 
 const entry = {
-  server: './src/server'
+  server: ['source-map-support/register', './src/server']
 }
 
 const output = {
