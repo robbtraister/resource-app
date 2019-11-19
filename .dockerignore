@@ -10,4 +10,5 @@ docker-compose*.yml
 *Dockerfile
 
 build/
+dist/
 node_modules/
