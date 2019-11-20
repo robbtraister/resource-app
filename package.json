@@ -2,6 +2,7 @@
   "name": "express-server",
   "version": "0.0.0",
   "description": "",
+  "main": "./build/server",
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
@@ -9,7 +10,7 @@
     "lint:ts": "eslint --ext .js,.ts .",
     "lint": "npm run lint:ts -- --fix",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
-    "start": "node ./build/server",
+    "start": "node .",
     "test": "tsc --noEmit && npm run lint:ts && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
