@@ -2,6 +2,7 @@
   "name": "preact-app",
   "version": "0.0.0",
   "description": "",
+  "main": "./build/server",
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
@@ -10,7 +11,7 @@
     "lint:ts": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint": "npm run lint:ts -- --fix && npm run lint:css -- --write",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
-    "start": "node ./build/server",
+    "start": "node .",
     "test": "tsc --noEmit && npm run lint:ts && npm run lint:css -- --check && jest",
     "preversion": "npm run test && git add -A",
     "postversion": "git push && git push --tags",
