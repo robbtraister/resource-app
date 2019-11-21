@@ -23,11 +23,12 @@ export default (options: Options) => {
       new FacebookStrategy(
         {
           ...facebook,
-          callbackURL: `${host}/auth/facebook`
+          callbackURL: `${host}/auth/facebook`,
+          profileFields: ['displayName', 'email', 'name']
         },
         function(accessToken, refreshToken, profile, done) {
           done(null, {
-            email: profile.email,
+            email: profile.emails[0].value,
             name: profile.name.givenName || profile.displayName
           })
         }
