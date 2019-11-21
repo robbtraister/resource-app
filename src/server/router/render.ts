@@ -2,9 +2,12 @@
 
 import path from 'path'
 
-import express from 'express'
-
 import renderSite from '../render'
+
+const isRedirect = err => {
+  const { statusCode } = err
+  return statusCode >= 300 && statusCode < 400
+}
 
 export default function(options) {
   async function render(req, res, next) {
@@ -23,29 +26,26 @@ export default function(options) {
     }
   }
 
-  const router = express()
+  return [
+    render,
 
-  router.use(render)
+    async (err, req, res, next) => {
+      // preserve redirect error from initial render attempt
+      isRedirect(err)
+        ? next(err)
+        : render(req, res, renderErr => {
+            // preserve redirect error from secondary render attempt
+            next(isRedirect(renderErr) ? renderErr : err)
+          })
+    },
 
-  router.use(async (err, req, res, next) => {
-    // ignore redirect errors
-    if (err && err.statusCode && err.statusCode >= 400) {
-      res.status(err.statusCode)
-      // just propagate the original error
-      await render(req, res, () => next(err))
-    } else {
-      next(err)
+    (req, res, next) => {
+      res.sendFile(
+        path.join(options.projectRoot, 'build', 'dist', 'index.html'),
+        err => {
+          err && next()
+        }
+      )
     }
-  })
-
-  router.use((req, res, next) => {
-    res.sendFile(
-      path.join(options.projectRoot, 'build', 'dist', 'index.html'),
-      err => {
-        err && next()
-      }
-    )
-  })
-
-  return router
+  ]
 }

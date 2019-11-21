@@ -6,6 +6,7 @@ const path = require('path')
 const { promisify } = require('util')
 
 const { DefinePlugin } = require('webpack')
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
@@ -120,6 +121,59 @@ module.exports = (_, argv) => {
 
   const mode = isProd ? 'production' : 'development'
 
+  const clientConfig = {
+    name: 'client',
+    devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
+    mode,
+    module: {
+      rules: rules({ isProd, extractCss: true })
+    },
+    optimization: {
+      minimizer: [
+        new TerserWebpackPlugin({
+          sourceMap: true
+        }),
+        new OptimizeCSSAssetsWebpackPlugin({})
+      ],
+      // namedChunks: true,
+      // namedModules: true,
+      splitChunks: {
+        chunks: 'async',
+        minSize: 0
+      }
+    },
+    output: {
+      ...output,
+      path: path.join(output.path, 'dist'),
+      publicPath: '/dist/'
+    },
+    plugins: [
+      new DefinePlugin({
+        __PRODUCTION__: JSON.stringify(isProd),
+        __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
+        __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
+        'typeof window': JSON.stringify('object')
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[name].css'
+      })
+    ],
+    resolve: {
+      ...resolve,
+      alias:
+        isProd && env.isPreact
+          ? {
+              ...resolve.alias,
+              react: 'preact/compat',
+              'react-dom': 'preact/compat'
+            }
+          : resolve.alias
+    },
+    target: 'web',
+    watchOptions
+  }
+
   return [
     {
       name: 'server',
@@ -167,6 +221,8 @@ module.exports = (_, argv) => {
       },
       plugins: [
         new DefinePlugin({
+          __PRIVATE_APP__: JSON.stringify(true),
+          __PRODUCTION__: JSON.stringify(isProd),
           __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
           __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
           'typeof window': JSON.stringify(undefined)
@@ -186,11 +242,12 @@ module.exports = (_, argv) => {
       }
     },
     {
-      name: 'client',
-      devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
+      ...clientConfig,
       entry: {
-        app: path.resolve(__dirname, 'src', 'client', 'engine'),
+        // 'site' entry is just to compile the site-wide CSS
+        site: path.join(env.projectRoot, 'src', 'views', 'site'),
         polyfills: path.resolve(__dirname, 'src', 'client', 'polyfills'),
+        app: path.resolve(__dirname, 'src', 'client', 'engine'),
         'polyfills/assign': 'core-js/features/object/assign',
         'polyfills/fetch': 'whatwg-fetch',
         'polyfills/includes': 'core-js/features/array/includes',
@@ -198,44 +255,13 @@ module.exports = (_, argv) => {
         'polyfills/promise': 'core-js/features/promise',
         'polyfills/set': 'core-js/features/set'
       },
-      mode,
-      module: {
-        rules: rules({ isProd, extractCss: true })
-      },
-      optimization: {
-        minimizer: [
-          new TerserWebpackPlugin({
-            sourceMap: true
-          }),
-          new OptimizeCSSAssetsWebpackPlugin({})
-        ],
-        namedChunks: true,
-        namedModules: true,
-        runtimeChunk: {
-          name: 'runtime'
-        },
-        splitChunks: {
-          chunks: 'async',
-          minSize: 0
-        }
-      },
-      output: {
-        ...output,
-        path: path.join(output.path, 'dist'),
-        publicPath: '/dist/'
-      },
       plugins: [
         new DefinePlugin({
-          __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
-          __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
-          'typeof window': JSON.stringify('object')
-        }),
-        new MiniCssExtractPlugin({
-          filename: '[name].css',
-          chunkFilename: '[name].css'
+          __PRIVATE_APP__: JSON.stringify(true)
         }),
         new HtmlWebpackPlugin({
-          excludeChunks: ['login'],
+          chunks: ['site', 'polyfills', 'app'],
+          excludeAssets: [/site\.js$/],
           filename: 'index.html',
           appId: env.app.id,
           inject: 'head',
@@ -248,59 +274,29 @@ module.exports = (_, argv) => {
           //     : {}
           // )
         }),
+        new HtmlWebpackExcludeAssetsPlugin(),
         new ScriptExtHtmlWebpackPlugin({
           defaultAttribute: 'defer'
-        })
-      ],
-      resolve: {
-        ...resolve,
-        alias:
-          isProd && env.isPreact
-            ? {
-                ...resolve.alias,
-                react: 'preact/compat',
-                'react-dom': 'preact/compat'
-              }
-            : resolve.alias
-      },
-      target: 'web',
-      watchOptions
-    },
-    // this is just to generate CSS
-    {
-      name: 'client',
-      devtool: false,
-      entry: {
-        site: path.join(env.projectRoot, 'src', 'views', 'site')
-      },
-      mode,
-      module: {
-        rules: rules({ isProd, extractCss: true })
-      },
-      optimization: {
-        minimizer: [new OptimizeCSSAssetsWebpackPlugin({})]
-      },
-      output: {
-        ...output,
-        path: path.join(output.path, 'dist')
-      },
-      plugins: [
-        new MiniCssExtractPlugin({
-          filename: '[name].css',
-          chunkFilename: '[name].css'
         }),
         new OnBuildPlugin(async stats => {
+          // delete the unused site script
           return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js')}`)
-        })
-      ],
-      resolve,
-      stats: {
-        // ignore missing site component
-        errors: false,
-        warnings: false
+        }),
+        ...clientConfig.plugins
+      ]
+    },
+    // build a smaller payload for unauthenticated visitors
+    {
+      ...clientConfig,
+      entry: {
+        www: path.resolve(__dirname, 'src', 'client', 'engine')
       },
-      target: 'web',
-      watchOptions
+      plugins: [
+        new DefinePlugin({
+          __PRIVATE_APP__: JSON.stringify(false)
+        }),
+        ...clientConfig.plugins
+      ]
     }
   ]
 }

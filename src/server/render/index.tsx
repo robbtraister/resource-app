@@ -62,6 +62,7 @@ export default async function renderSite({
   projectRoot: string
   user?: object
 }) {
+  const app = user ? 'app' : 'www'
   const context: { url?: string } = {}
 
   const promises = []
@@ -88,8 +89,7 @@ export default async function renderSite({
               )})document.write('<script type="application/javascript" src="/dist/polyfills.js" defer=""><\\/script>');`
         }}
       />
-      <Script name="runtime" />
-      <Script name="app" />
+      <Script name={app} />
       <script src="/auth/user?jsonp=setUser" defer />
     </>
   )
@@ -131,7 +131,7 @@ export default async function renderSite({
     return (
       <>
         <Style name="site" />
-        <Style name="app" />
+        <Style name={app} />
         <StyledComponents />
       </>
     )
