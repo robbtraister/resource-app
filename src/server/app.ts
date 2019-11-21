@@ -19,7 +19,6 @@ export default function app(options: Options = {}) {
   app.use(
     (err, req, res, next) => {
       if (
-        err &&
         err.location &&
         err.statusCode &&
         err.statusCode >= 300 &&
@@ -31,7 +30,12 @@ export default function app(options: Options = {}) {
       }
     },
     (err, req, res, next) => {
-      console.error(err)
+      if (err.statusCode && err.statusCode < 500) {
+        // if a request error, do not log entire stack trace
+        console.log(err.message || err.body || err)
+      } else {
+        console.error(err)
+      }
       next(err)
     },
     options.isProd
