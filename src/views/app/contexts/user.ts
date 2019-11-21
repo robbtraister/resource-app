@@ -4,10 +4,10 @@ import { createContext, useContext } from 'react'
 
 const userContext = createContext({ name: null })
 
-function useUserContext() {
+function useUser() {
   return useContext(userContext)
 }
 
 export default userContext
 
-export { useUserContext }
+export { useUser }
