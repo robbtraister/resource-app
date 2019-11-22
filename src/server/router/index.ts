@@ -21,12 +21,11 @@ export default function router(options: Options) {
 
   router.use('/api', csurf({ cookie: true }), api(options))
 
-  // reserved paths that should not be rendered
-  router.use(['/api', '/gql'], (req, res, next) => {
-    res.sendStatus(404)
-  })
-
-  router.use(render(options))
+  router.use(
+    // reserved paths that should not be rendered
+    /^(?!\/(api|auth|dist|logout|signout|use?r)(\/|$))/,
+    render(options)
+  )
 
   return router
 }

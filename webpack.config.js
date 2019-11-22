@@ -150,9 +150,9 @@ module.exports = (_, argv) => {
     plugins: [
       new DefinePlugin({
         __PRODUCTION__: JSON.stringify(isProd),
+        'typeof window': JSON.stringify('object'),
         __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
-        __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
-        'typeof window': JSON.stringify('object')
+        __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title)
       }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
@@ -180,13 +180,8 @@ module.exports = (_, argv) => {
       devServer: {
         before: app => {
           app.use(/^(?!\/dist\/)/, (req, res, next) => {
-            Object.keys(require.cache)
-              .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
-              .forEach(pkg => {
-                delete require.cache[pkg]
-              })
-
-            require(buildArtifact).app(env)(req, res, next)
+            // require on each request because the cache may have been cleared
+            require(buildArtifact).app()(req, res, next)
           })
         },
         contentBase: '/',
@@ -221,12 +216,23 @@ module.exports = (_, argv) => {
       },
       plugins: [
         new DefinePlugin({
-          __PRIVATE_APP__: JSON.stringify(true),
           __PRODUCTION__: JSON.stringify(isProd),
+          'typeof window': JSON.stringify(undefined),
           __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
           __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
-          'typeof window': JSON.stringify(undefined)
-        })
+          __PRIVATE_APP__: JSON.stringify(true)
+        }),
+        ...(isProd
+          ? []
+          : [
+              new OnBuildPlugin(async stats => {
+                Object.keys(require.cache)
+                  .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
+                  .forEach(pkg => {
+                    delete require.cache[pkg]
+                  })
+              })
+            ])
       ],
       resolve,
       target: 'node',
