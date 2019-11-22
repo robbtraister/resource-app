@@ -181,7 +181,7 @@ module.exports = (_, argv) => {
         before: app => {
           app.use(/^(?!\/dist\/)/, (req, res, next) => {
             // require on each request because the cache may have been cleared
-            require(buildArtifact).app()(req, res, next)
+            require(buildArtifact).devApp(req, res, next)
           })
         },
         contentBase: '/',
