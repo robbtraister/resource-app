@@ -2,7 +2,19 @@
 
 const path = require('path')
 
+const { DefinePlugin } = require('webpack')
+
 const env = require('./env')
+
+class OnBuildPlugin {
+  constructor(fn) {
+    this.fn = fn
+  }
+
+  apply(compiler) {
+    compiler.hooks.done.tap('OnBuildPlugin', this.fn)
+  }
+}
 
 const entry = {
   server: ['source-map-support/register', './src/server']
@@ -36,13 +48,8 @@ module.exports = (_, argv) => {
       devServer: {
         before: app => {
           app.use((req, res, next) => {
-            Object.keys(require.cache)
-              .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
-              .forEach(pkg => {
-                delete require.cache[pkg]
-              })
-
-            require(buildArtifact).app(env)(req, res, next)
+            // require on each request because the cache may have been cleared
+            require(buildArtifact).app()(req, res, next)
           })
         },
         host: '0.0.0.0',
@@ -84,6 +91,23 @@ module.exports = (_, argv) => {
         ...output,
         libraryTarget: 'commonjs2'
       },
+      plugins: [
+        new DefinePlugin({
+          __PRODUCTION__: JSON.stringify(isProd),
+          'typeof window': JSON.stringify(undefined)
+        }),
+        ...(isProd
+          ? []
+          : [
+              new OnBuildPlugin(async stats => {
+                Object.keys(require.cache)
+                  .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
+                  .forEach(pkg => {
+                    delete require.cache[pkg]
+                  })
+              })
+            ])
+      ],
       resolve,
       target: 'node',
       watchOptions,
