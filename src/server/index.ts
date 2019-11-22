@@ -36,3 +36,6 @@ function main(options: Options = {}) {
 // use eval and __filename instead of module to preserve functionality in webpack artifact
 const isScript = eval('require.main && (require.main.filename === __filename)') // eslint-disable-line
 isScript && main()
+
+// cache the default app config for faster reload
+export const devApp = env.isProd ? null : app()
