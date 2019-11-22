@@ -37,7 +37,7 @@ interface StyleProps {
 }
 
 const Script = ({ name }: ScriptProps) => (
-  <script defer type="application/javascript" src={`/dist/${name}.js`} />
+  <script type="text/javascript" src={`/dist/${name}.js`} defer />
 )
 
 const polyfills = {
@@ -72,6 +72,7 @@ export default async function renderSite({
   const Libs = () => (
     <>
       <script
+        type="text/javascript"
         dangerouslySetInnerHTML={{
           __html:
             // Object.keys(polyfills)
@@ -79,18 +80,18 @@ export default async function renderSite({
             //     polyfill =>
             //       `if(!${
             //         polyfills[polyfill]
-            //       })document.write('<script type="application/javascript src="/dist/polyfills/${polyfill}.js" defer=""><\\/script>');`
+            //       })document.write('<script type="text/javascript" src="/dist/polyfills/${polyfill}.js" defer=""><\\/script>');`
             //   )
             //   .join('')
-            `if(${Object.values(polyfills)
-              .map(p => `!${p}`)
-              .join(
-                '||'
-              )})document.write('<script type="application/javascript" src="/dist/polyfills.js" defer=""><\\/script>');`
+            `if(!(${Object.values(polyfills).join(
+              '&&'
+            )}))document.write('<script type="text/javascript" src="/dist/polyfills.js" defer=""><\\/script>');`
         }}
       />
       <Script name={app} />
-      <script src="/auth/user?jsonp=setUser" defer />
+      {user && (
+        <script type="text/javascript" src="/auth/user?jsonp=setUser" defer />
+      )}
     </>
   )
 
@@ -118,14 +119,7 @@ export default async function renderSite({
           return null
         }
       : function Style({ name }: StyleProps) {
-          return (
-            <link
-              {...props}
-              rel="stylesheet"
-              type="text/css"
-              href={`/dist/${name}.css`}
-            />
-          )
+          return <link {...props} href={`/dist/${name}.css`} rel="stylesheet" />
         }
 
     return (
@@ -151,6 +145,7 @@ export default async function renderSite({
       </div>
       {!isStatic && (
         <script
+          type="text/javascript"
           dangerouslySetInnerHTML={{
             __html: `window.__DATA__=${JSON.stringify({ store })}`
           }}

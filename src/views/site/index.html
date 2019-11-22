@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script type="text/javascript">
+      if(!((window.Object&&window.Object.assign)&&window.fetch&&Array.prototype.includes&&window.Map&&window.Promise&&window.Set))document.write('<script type="text/javascript" src="/dist/polyfills.js" defer><\\/script>');
+    </script>
+  </head>
+  <body>
+    <script type="text/javascript" src="/auth/user?jsonp=setUser" defer></script>
+    <div id="app"></div>
+  </body>
+</html>
+
+

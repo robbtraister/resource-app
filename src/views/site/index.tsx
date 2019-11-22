@@ -8,8 +8,9 @@ import './styles.scss'
 const Site = ({ title = '', App, Styles }) => (
   <html>
     <head>
-      <title>{title}</title>
+      <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width" />
+      <title>{title}</title>
       <Styles />
     </head>
     <body>

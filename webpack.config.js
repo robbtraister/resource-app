@@ -1,7 +1,7 @@
 'use strict'
 
 const childProcess = require('child_process')
-// const fs = require('fs')
+const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
 
@@ -26,6 +26,14 @@ class OnBuildPlugin {
     compiler.hooks.done.tap('OnBuildPlugin', this.fn)
   }
 }
+
+const indexTemplate = path.resolve(
+  __dirname,
+  'src',
+  'views',
+  'site',
+  'index.html'
+)
 
 const entry = {
   server: ['source-map-support/register', './src/server']
@@ -121,6 +129,13 @@ module.exports = (_, argv) => {
 
   const mode = isProd ? 'production' : 'development'
 
+  const definitions = {
+    __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
+    __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
+    __PRIVATE_APP__: JSON.stringify(true),
+    __PRODUCTION__: JSON.stringify(isProd)
+  }
+
   const clientConfig = {
     name: 'client',
     devtool: isProd ? 'hidden-source-map' : 'eval-source-map',
@@ -149,10 +164,8 @@ module.exports = (_, argv) => {
     },
     plugins: [
       new DefinePlugin({
-        __PRODUCTION__: JSON.stringify(isProd),
-        'typeof window': JSON.stringify('object'),
-        __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
-        __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title)
+        ...definitions,
+        'typeof window': JSON.stringify('object')
       }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
@@ -216,11 +229,8 @@ module.exports = (_, argv) => {
       },
       plugins: [
         new DefinePlugin({
-          __PRODUCTION__: JSON.stringify(isProd),
-          'typeof window': JSON.stringify(undefined),
-          __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
-          __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
-          __PRIVATE_APP__: JSON.stringify(true)
+          ...definitions,
+          'typeof window': JSON.stringify(undefined)
         }),
         ...(isProd
           ? []
@@ -249,36 +259,36 @@ module.exports = (_, argv) => {
     },
     {
       ...clientConfig,
+      name: 'polyfill',
       entry: {
-        // 'site' entry is just to compile the site-wide CSS
-        site: path.join(env.projectRoot, 'src', 'views', 'site'),
         polyfills: path.resolve(__dirname, 'src', 'client', 'polyfills'),
-        app: path.resolve(__dirname, 'src', 'client', 'engine'),
         'polyfills/assign': 'core-js/features/object/assign',
         'polyfills/fetch': 'whatwg-fetch',
         'polyfills/includes': 'core-js/features/array/includes',
         'polyfills/map': 'core-js/features/map',
         'polyfills/promise': 'core-js/features/promise',
         'polyfills/set': 'core-js/features/set'
+      }
+    },
+    {
+      ...clientConfig,
+      entry: {
+        // 'site' entry is just to compile the site-wide CSS
+        site: path.join(env.projectRoot, 'src', 'views', 'site'),
+        app: path.resolve(__dirname, 'src', 'client', 'engine')
       },
       plugins: [
-        new DefinePlugin({
-          __PRIVATE_APP__: JSON.stringify(true)
-        }),
         new HtmlWebpackPlugin({
-          chunks: ['site', 'polyfills', 'app'],
           excludeAssets: [/site\.js$/],
           filename: 'index.html',
-          appId: env.app.id,
           inject: 'head',
-          title: env.app.title
-          // ...(
-          //   fs.existsSync(indexTemplate)
-          //     ? {
-          //       template: indexTemplate
-          //     }
-          //     : {}
-          // )
+          appId: env.app.id,
+          title: env.app.title,
+          ...(fs.existsSync(indexTemplate)
+            ? {
+                template: indexTemplate
+              }
+            : {})
         }),
         new HtmlWebpackExcludeAssetsPlugin(),
         new ScriptExtHtmlWebpackPlugin({
@@ -286,7 +296,7 @@ module.exports = (_, argv) => {
         }),
         new OnBuildPlugin(async stats => {
           // delete the unused site script
-          return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js')}`)
+          return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js*')}`)
         }),
         ...clientConfig.plugins
       ]
