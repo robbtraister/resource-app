@@ -12,7 +12,7 @@
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node .",
     "test": "tsc --noEmit && npm run lint:ts && jest",
-    "preversion": "npm run test && git add -A",
+    "preversion": "npm run test",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
   },
@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "babel-loader": "^8.0.6",
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
