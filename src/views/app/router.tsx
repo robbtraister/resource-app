@@ -1,7 +1,5 @@
 'use strict'
 
-/* global __PRIVATE_APP__ */
-
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 
@@ -19,14 +17,8 @@ const Router = () => {
   return (
     <Switch>
       <Route path="/welcome" component={Welcome} />
-      <Route
-        path="/dashboard"
-        component={__PRIVATE_APP__ && user ? Home : Login}
-      />
-      <Route
-        path="/"
-        component={__PRIVATE_APP__ && user ? GoDashboard : GoWelcome}
-      />
+      <Route path="/dashboard" component={user ? Home : Login} />
+      <Route path="/" component={user ? GoDashboard : GoWelcome} />
     </Switch>
   )
 }

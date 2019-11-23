@@ -130,9 +130,9 @@ module.exports = (_, argv) => {
   const mode = isProd ? 'production' : 'development'
 
   const definitions = {
+    __AUTHENTICATED__: JSON.stringify(true),
     __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
     __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
-    __PRIVATE_APP__: JSON.stringify(true),
     __PRODUCTION__: JSON.stringify(isProd)
   }
 
@@ -309,7 +309,7 @@ module.exports = (_, argv) => {
       },
       plugins: [
         new DefinePlugin({
-          __PRIVATE_APP__: JSON.stringify(false)
+          __AUTHENTICATED__: JSON.stringify(false)
         }),
         ...clientConfig.plugins
       ]
