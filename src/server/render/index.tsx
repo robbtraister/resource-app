@@ -12,9 +12,7 @@ import { readFile } from '../utils/promises'
 
 import App from '~/src/views/app'
 import Site from '~/src/views/site'
-// import Store from './store'
-
-const Store = ({ user, location }) => ({})
+import Store from '../store'
 
 const StyledComponents = 'styled-components'
 const STYLED_COMPONENTS_PATTERN = new RegExp(

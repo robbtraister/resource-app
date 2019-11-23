@@ -5,11 +5,14 @@ import React from 'react'
 
 import Router from './router'
 
+import storeContext from './contexts/store'
 import userContext from './contexts/user'
 
 const App = ({ user, store }) => (
   <userContext.Provider value={user}>
-    <Router />
+    <storeContext.Provider value={store}>
+      <Router />
+    </storeContext.Provider>
   </userContext.Provider>
 )
 
