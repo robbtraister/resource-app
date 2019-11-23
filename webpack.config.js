@@ -42,6 +42,8 @@ const buildArtifact = path.resolve(output.path, Object.keys(entry)[0])
 module.exports = (_, argv) => {
   const isProd = env.isProd || /^prod/i.test(argv.mode)
 
+  const mode = isProd ? 'production' : 'development'
+
   return [
     {
       name: 'server',
@@ -93,6 +95,7 @@ module.exports = (_, argv) => {
       },
       plugins: [
         new DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify(mode),
           __PRODUCTION__: JSON.stringify(isProd),
           'typeof window': JSON.stringify(undefined)
         }),
