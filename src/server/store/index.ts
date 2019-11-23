@@ -1,5 +1,5 @@
 'use strict'
 
-export default function({ user, location }) {
+export default async function({ user, location }) {
   return {}
 }

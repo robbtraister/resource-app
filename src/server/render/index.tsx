@@ -65,7 +65,7 @@ export default async function renderSite({
 
   const promises = []
 
-  const store = Store({ user, location })
+  const store = await Store({ user, location })
 
   const Libs = () => (
     <>
