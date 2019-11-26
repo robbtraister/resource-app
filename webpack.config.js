@@ -131,7 +131,6 @@ module.exports = (_, argv) => {
 
   const definitions = {
     'process.env.NODE_ENV': JSON.stringify(mode),
-    __AUTHENTICATED__: JSON.stringify(true),
     __DEFAULT_APP_ID__: JSON.stringify(env.app.id),
     __DEFAULT_APP_TITLE__: JSON.stringify(env.app.title),
     __PRODUCTION__: JSON.stringify(isProd)
@@ -298,19 +297,6 @@ module.exports = (_, argv) => {
         new OnBuildPlugin(async stats => {
           // delete the unused site script
           return exec(`rm -rf ${path.join(output.path, 'dist', 'site.js*')}`)
-        }),
-        ...clientConfig.plugins
-      ]
-    },
-    // build a smaller payload for unauthenticated visitors
-    {
-      ...clientConfig,
-      entry: {
-        www: path.resolve(__dirname, 'src', 'client', 'engine')
-      },
-      plugins: [
-        new DefinePlugin({
-          __AUTHENTICATED__: JSON.stringify(false)
         }),
         ...clientConfig.plugins
       ]
