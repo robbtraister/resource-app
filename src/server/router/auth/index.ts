@@ -7,7 +7,7 @@ import facebook from './facebook'
 import google from './google'
 import jwt from './jwt'
 
-import { Redirect, Unauthenticated } from '../../errors'
+import { Redirect, Unauthenticated, Unauthorized } from '../../errors'
 
 passport.serializeUser(function(user, done) {
   done(null, JSON.stringify(user))
@@ -44,13 +44,9 @@ export default function router(options: Options) {
     router.use(jwt(options))
 
     router.use((req, res, next) => {
-      if (req.user) {
-        next()
-      } else {
-        // ensure user is defined
-        req.user = null
-        next(new Unauthenticated())
-      }
+      // ensure user is defined
+      req.user = req.user || null
+      next()
     })
 
     router.use(/(\/auth)?\/use?r/, (req, res, next) => {
@@ -61,4 +57,17 @@ export default function router(options: Options) {
   }
 
   return router
+}
+
+export const verify = (verifyFn = user => true) => (req, res, next) => {
+  const { user } = req
+  if (user) {
+    if (verifyFn(user)) {
+      next()
+    } else {
+      next(new Unauthorized())
+    }
+  } else {
+    next(new Unauthenticated())
+  }
 }

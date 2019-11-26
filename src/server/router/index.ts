@@ -6,7 +6,7 @@ import express from 'express'
 
 import api from './api'
 import assets from './assets'
-import auth from './auth'
+import auth, { verify } from './auth'
 import render from './render'
 
 export default function router(options: Options) {
@@ -19,7 +19,7 @@ export default function router(options: Options) {
   // don't serve under '/auth' because we need to run authorization on all endpoints
   router.use(auth(options))
 
-  router.use('/api', csurf({ cookie: true }), api(options))
+  router.use('/api', verify(), csurf({ cookie: true }), api(options))
 
   router.use(
     // reserved paths that should not be rendered
