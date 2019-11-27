@@ -19,14 +19,9 @@
   "eslint.autoFixOnSave": true,
   "eslint.validate": [
       "javascript",
-      "javascriptreact",
       {
           "autoFix": true,
           "language": "typescript"
-      },
-      {
-          "autoFix": true,
-          "language": "typescriptreact"
       }
   ],
   "prettier.semi": false,
