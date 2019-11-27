@@ -44,13 +44,11 @@ RUN \
     (addgroup -S ${USER} 2> /dev/null || true) && \
     (adduser -S ${USER} -G ${USER} -s /bin/sh 2> /dev/null || true)
 
-COPY ./public ./public
-
 ARG PROJECT
 COPY --from=build /opt/${PROJECT}/build ./build
 
 ENTRYPOINT ["node"]
-CMD ["./build/server"]
+CMD ["./build/main"]
 
 ENV NODE_ENV=production
 

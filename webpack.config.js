@@ -17,7 +17,7 @@ class OnBuildPlugin {
 }
 
 const entry = {
-  server: ['source-map-support/register', './src/server']
+  main: ['source-map-support/register', './src']
 }
 
 const output = {
@@ -37,8 +37,6 @@ const watchOptions = {
   ignored: /[\\/]node_modules[\\/]/
 }
 
-const buildArtifact = path.resolve(output.path, Object.keys(entry)[0])
-
 module.exports = (_, argv) => {
   const isProd = env.isProd || /^prod/i.test(argv.mode)
 
@@ -46,19 +44,6 @@ module.exports = (_, argv) => {
 
   return [
     {
-      name: 'server',
-      devServer: {
-        before: app => {
-          app.use((req, res, next) => {
-            // require on each request because the cache may have been cleared
-            require(buildArtifact).devApp(req, res, next)
-          })
-        },
-        host: '0.0.0.0',
-        index: '',
-        port: env.port,
-        writeToDisk: true
-      },
       entry,
       externals: [
         function(context, request, callback) {

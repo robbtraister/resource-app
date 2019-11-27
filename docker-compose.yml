@@ -1,8 +1,6 @@
 version: '3.4'
 
 services:
-  server:
-    image: robbtraister/express-server
+  project:
+    image: robbtraister/standard-project
     build: .
-    ports:
-      - 8080:8080
