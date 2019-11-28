@@ -2,11 +2,11 @@
   "name": "standard-project",
   "version": "0.0.0",
   "description": "",
-  "main": "./build/server",
+  "main": "./build/main",
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
-    "dev": "npm run clean && node --inspect=0.0.0.0:9229 ./node_modules/.bin/webpack-dev-server",
+    "dev": "node --inspect=0.0.0.0:9229 -r ts-node/register ./src",
     "lint:ts": "eslint --ext .js,.ts .",
     "lint": "npm run lint:ts -- --fix",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
@@ -49,6 +49,7 @@
     "lint-staged": "^9.4.3",
     "prettier": "^1.19.1",
     "prettier-config-standard": "^1.0.1",
+    "ts-node": "^8.5.3",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
