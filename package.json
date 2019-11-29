@@ -2,7 +2,7 @@
   "name": "express-server",
   "version": "0.0.0",
   "description": "",
-  "main": "./build/server",
+  "main": "./server",
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
