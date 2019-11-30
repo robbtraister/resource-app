@@ -2,10 +2,8 @@
 
 const cluster = require('cluster')
 
-const { master, server } = require('./build/server')
-
 if (cluster.isMaster) {
-  master()
+  require('./build/master').master()
 } else {
-  server()
+  require('./build/server').server()
 }
