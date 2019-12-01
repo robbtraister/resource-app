@@ -65,6 +65,7 @@ module.exports = {
   workerCount: isProd
     ? Number(process.env.WORKER_COUNT) ||
       Number(config.workerCount) ||
-      require('os').cpus().length
+      require('os').cpus().length ||
+      1
     : 1
 }
