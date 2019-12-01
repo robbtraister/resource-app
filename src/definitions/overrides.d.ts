@@ -1,11 +1,11 @@
 declare module 'cluster' {
-  export interface ClusterSettings {
+  interface ClusterSettings {
     workerCount?: number
   }
 }
 
 declare namespace Express {
-  export interface Request {
+  interface Request {
     csrfToken?: Function
     user?: object
   }
