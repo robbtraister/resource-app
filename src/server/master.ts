@@ -43,56 +43,50 @@ async function terminateWorker(
   })
 }
 
+export async function cycleWorkers() {
+  const { workerCount = env.workerCount } = cluster.settings
+  const oldWorkers = Object.values(cluster.workers)
+
+  const result = await createWorkers(workerCount)
+
+  debug(`${workerCount} worker${workerCount === 1 ? '' : 's'} Created`)
+
+  const oldWorkerCount = oldWorkers.length
+  if (oldWorkerCount) {
+    Promise.all(oldWorkers.map(worker => terminateWorker(worker))).then(() => {
+      debug(
+        `${oldWorkerCount} worker${oldWorkerCount === 1 ? '' : 's'} Terminated`
+      )
+    })
+  }
+
+  return result
+}
+
+async function messageHandler(proc, msg: Message = {}) {
+  const { id, type, action } = msg
+
+  if (
+    msg === 'restart' ||
+    type === 'restart' ||
+    (type === 'action' && action === 'restart')
+  ) {
+    try {
+      await cycleWorkers()
+
+      proc.send({ id, type: 'complete' })
+    } catch (error) {
+      proc.send({ id, type: 'error', error })
+    }
+  } else {
+    proc.send({ id, type: 'unknown' })
+  }
+}
+
 export async function master(options: Options = {}) {
-  const port = Number(options.port) || env.port
   const workerCount = Number(options.workerCount) || env.workerCount
 
-  async function cycleWorkers() {
-    const oldWorkers = Object.values(cluster.workers)
-
-    const result = await createWorkers(workerCount)
-
-    debug(
-      `${workerCount} worker${
-        workerCount === 1 ? '' : 's'
-      } Listening on port: ${port}`
-    )
-
-    const oldWorkerCount = oldWorkers.length
-    if (oldWorkerCount) {
-      Promise.all(oldWorkers.map(worker => terminateWorker(worker))).then(
-        () => {
-          debug(
-            `${oldWorkerCount} worker${
-              oldWorkerCount === 1 ? '' : 's'
-            } Terminated`
-          )
-        }
-      )
-    }
-
-    return result
-  }
-
-  async function messageHandler(proc, msg: Message = {}) {
-    const { id, type, action } = msg
-
-    if (
-      msg === 'restart' ||
-      type === 'restart' ||
-      (type === 'action' && action === 'restart')
-    ) {
-      try {
-        await cycleWorkers()
-
-        proc.send({ id, type: 'complete' })
-      } catch (error) {
-        proc.send({ id, type: 'error', error })
-      }
-    } else {
-      proc.send({ id, type: 'unknown' })
-    }
-  }
+  cluster.setupMaster({ workerCount })
 
   cluster.on('message', messageHandler)
 
