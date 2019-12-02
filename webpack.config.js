@@ -57,6 +57,8 @@ const resolve = {
     '.mjs',
     '.jsx',
     '.js',
+    '.cjsx',
+    '.cjs',
     '.yaml',
     '.yml',
     '.json',
