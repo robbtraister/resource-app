@@ -30,7 +30,7 @@ const resolve = {
   alias: {
     '~': __dirname
   },
-  extensions: ['.ts', '.mjs', '.js', '.yaml', '.yml', '.json']
+  extensions: ['.ts', '.mjs', '.js', '.cjs', '.yaml', '.yml', '.json']
 }
 
 const watchOptions = {
