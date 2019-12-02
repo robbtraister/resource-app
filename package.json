@@ -12,7 +12,7 @@
     "lint": "npm run lint:ts -- --fix && npm run lint:css -- --write",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node .",
-    "test": "tsc --noEmit && npm run lint:ts && npm run lint:css -- --check && jest",
+    "test": "npm audit && tsc --noEmit && npm run lint:ts && npm run lint:css -- --check && jest",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
