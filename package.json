@@ -7,7 +7,7 @@
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./build/*",
     "dev": "npm run clean && node --inspect=0.0.0.0:9229 ./node_modules/.bin/webpack-dev-server",
-    "lint:ts": "eslint --ext .js,.ts .",
+    "lint:ts": "eslint --ext .cjs,.js,.mjs,.ts .",
     "lint": "npm run lint:ts -- --fix",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node .",
@@ -85,7 +85,7 @@
     ]
   },
   "lint-staged": {
-    "**/*.{js,ts}": [
+    "**/*.{cjs,js,mjs,ts}": [
       "eslint --fix",
       "git add"
     ]
