@@ -6,16 +6,6 @@ const { DefinePlugin } = require('webpack')
 
 const env = require('./env')
 
-class OnBuildPlugin {
-  constructor(fn) {
-    this.fn = fn
-  }
-
-  apply(compiler) {
-    compiler.hooks.done.tap('OnBuildPlugin', this.fn)
-  }
-}
-
 const entry = {
   main: ['source-map-support/register', './src']
 }
@@ -83,18 +73,7 @@ module.exports = (_, argv) => {
           'process.env.NODE_ENV': JSON.stringify(mode),
           __PRODUCTION__: JSON.stringify(isProd),
           'typeof window': JSON.stringify(undefined)
-        }),
-        ...(isProd
-          ? []
-          : [
-              new OnBuildPlugin(async stats => {
-                Object.keys(require.cache)
-                  .filter(pkg => !/[\\/]node_modules[\\/]/.test(pkg))
-                  .forEach(pkg => {
-                    delete require.cache[pkg]
-                  })
-              })
-            ])
+        })
       ],
       resolve,
       target: 'node',
