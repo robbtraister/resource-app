@@ -46,6 +46,15 @@ const output = {
   path: path.resolve(__dirname, 'build')
 }
 
+const polyfills = {
+  'polyfills/assign': 'core-js/features/object/assign',
+  'polyfills/fetch': 'whatwg-fetch',
+  'polyfills/includes': 'core-js/features/array/includes',
+  'polyfills/map': 'core-js/features/map',
+  'polyfills/promise': 'core-js/features/promise',
+  'polyfills/set': 'core-js/features/set'
+}
+
 const resolve = {
   alias: {
     '~': __dirname
@@ -264,13 +273,8 @@ module.exports = (_, argv) => {
       ...clientConfig,
       name: 'polyfill',
       entry: {
-        polyfills: path.resolve(__dirname, 'src', 'client', 'polyfills'),
-        'polyfills/assign': 'core-js/features/object/assign',
-        'polyfills/fetch': 'whatwg-fetch',
-        'polyfills/includes': 'core-js/features/array/includes',
-        'polyfills/map': 'core-js/features/map',
-        'polyfills/promise': 'core-js/features/promise',
-        'polyfills/set': 'core-js/features/set'
+        ...polyfills,
+        polyfills: Object.values(polyfills)
       }
     },
     {
