@@ -4,7 +4,7 @@ const path = require('path')
 
 const { DefinePlugin } = require('webpack')
 
-const env = require('./env')
+const PROD_PATTERN = /^prod/i
 
 const entry = {
   main: ['source-map-support/register', './src']
@@ -28,7 +28,8 @@ const watchOptions = {
 }
 
 module.exports = (_, argv) => {
-  const isProd = env.isProd || /^prod/i.test(argv.mode)
+  const isProd =
+    PROD_PATTERN.test(process.env.NODE_ENV) || PROD_PATTERN.test(argv.mode)
 
   const mode = isProd ? 'production' : 'development'
 
