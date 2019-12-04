@@ -21,7 +21,6 @@
   "license": "ISC",
   "dependencies": {
     "debug": "^4.1.1",
-    "dotenv": "^8.2.0",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
