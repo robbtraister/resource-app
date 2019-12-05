@@ -19,7 +19,6 @@
     [
       "@babel/typescript",
       {
-        "isTSX": true,
         "allExtensions": true
       }
     ]
