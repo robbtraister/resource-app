@@ -11,7 +11,7 @@
     "lint": "npm run lint:ts -- --fix",
     "prod": "NODE_ENV=production npm run build && NODE_ENV=production npm run start",
     "start": "node .",
-    "test": "npm audit && tsc --noEmit && npm run lint:ts && jest",
+    "test": "npm audit && tsc --noEmit && npm run lint:ts && jest --coverage",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
     "watch": "npm run build -- --watch"
