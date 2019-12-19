@@ -4,6 +4,9 @@
   "files.trimTrailingWhitespace": true,
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "[css]": {
     "editor.formatOnSave": true
   },
@@ -16,14 +19,6 @@
   "[scss]": {
     "editor.formatOnSave": true
   },
-  "eslint.autoFixOnSave": true,
-  "eslint.validate": [
-      "javascript",
-      {
-          "autoFix": true,
-          "language": "typescript"
-      }
-  ],
   "prettier.semi": false,
   "prettier.singleQuote": true
 }
