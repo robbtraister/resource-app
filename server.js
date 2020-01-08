@@ -1,9 +1,10 @@
+#!/usr/bin/env node
+
 'use strict'
 
 const cluster = require('cluster')
 
-const { master, server } = require('./build/server')
-
 if (module === require.main) {
+  const { master, server } = require('./build/server')
   ;(cluster.isMaster ? master : server)()
 }
