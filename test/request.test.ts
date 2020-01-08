@@ -9,15 +9,12 @@ import request from 'supertest'
 import app from '../src/server/app'
 
 test('hello', () => {
-  return (
-    request(app({ auth: null }))
-      .get('/')
-      // .expect(200)
-      .then(res => {
-        console.log(res)
-        assert.strictEqual(res.text, 'hello, world!')
-      })
-  )
+  return request(app({ auth: null }))
+    .get('/')
+    .expect(200)
+    .then(res => {
+      assert.strictEqual(res.text, 'hello, world!')
+    })
 })
 
 test('favicon', () => {
