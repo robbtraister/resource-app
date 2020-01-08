@@ -17,8 +17,7 @@ class OnBuildPlugin {
 }
 
 const entry = {
-  server: ['source-map-support/register', './src/server'],
-  master: ['source-map-support/register', './src/server/master']
+  server: ['source-map-support/register', './src/server']
 }
 
 const output = {
