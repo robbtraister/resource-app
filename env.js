@@ -6,6 +6,9 @@ const path = require('path')
 
 const { config = {} } = require('./package.json')
 
+const DISABLED_PATTERN = /^(disabled?|false|no|off)$/i
+// const ENABLED_PATTERN = /^(enabled?|true|on|yes)$/i
+
 require('dotenv').config({ path: path.resolve('./.env') })
 
 const facebook = process.env.FACEBOOK_APP_ID
@@ -36,7 +39,7 @@ module.exports = {
     title: process.env.APP_TITLE || (config.app && config.app.title) || ''
   },
 
-  auth: DISABLED.test(process.env.AUTH)
+  auth: DISABLED_PATTERN.test(process.env.AUTH)
     ? null
     : {
         cookie:
@@ -57,6 +60,8 @@ module.exports = {
   ),
 
   isProd,
+
+  logging: !DISABLED_PATTERN.test(process.env.LOGGING),
 
   port,
 

@@ -2,7 +2,7 @@
 
 import express from 'express'
 
-import { sendMessage } from '../messages'
+import { Server as ServerError } from '../errors'
 
 export default function router(options) {
   const apiRouter = express()
@@ -11,17 +11,12 @@ export default function router(options) {
     res.send({ csrf: req.csrfToken() })
   })
 
-  apiRouter.post('/restart', async (req, res, next) => {
-    try {
-      await sendMessage({ type: 'restart' })
-      res.sendStatus(200)
-    } catch (err) {
-      next(err)
-    }
-  })
-
   apiRouter.use('/uri', (req, res, next) => {
     res.send({ uri: req.originalUrl })
+  })
+
+  apiRouter.use(['/error/:code(\\d+)', '/error'], (req, res, next) => {
+    next(new ServerError(+req.params.code || 500))
   })
 
   return apiRouter
