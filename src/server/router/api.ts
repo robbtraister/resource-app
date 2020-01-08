@@ -2,6 +2,8 @@
 
 import express from 'express'
 
+import { Server as ServerError } from '../errors'
+
 export default function router(options) {
   const apiRouter = express()
 
@@ -11,6 +13,10 @@ export default function router(options) {
 
   apiRouter.use('/uri', (req, res, next) => {
     res.send({ uri: req.originalUrl })
+  })
+
+  apiRouter.use(['/error/:code(\\d+)', '/error'], (req, res, next) => {
+    next(new ServerError(+req.params.code || 500))
   })
 
   return apiRouter

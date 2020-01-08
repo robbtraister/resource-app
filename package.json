@@ -72,6 +72,13 @@
     }
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}",
+      "!src/server/*.{js,ts}",
+      "src/server/app.ts",
+      "!src/server/router/auth/**/*",
+      "!src/**/*.d.ts"
+    ],
     "moduleNameMapper": {
       "^~/(.*)": "<rootDir>/$1"
     },

@@ -2,7 +2,12 @@
 
 /* global expect, test */
 
-import { Redirect, Unauthenticated, Unauthorized } from '../src/server/errors'
+import {
+  Redirect,
+  Server,
+  Unauthenticated,
+  Unauthorized
+} from '../src/server/errors'
 
 test('verify redirect error', () => {
   const redirect = new Redirect('/home')
@@ -16,6 +21,12 @@ test('verify permanent redirect error', () => {
 
   expect(redirect.statusCode).toBe(301)
   expect(redirect.location).toBe('/home')
+})
+
+test('verify server error', () => {
+  const serverError = new Server()
+
+  expect(serverError.statusCode).toBe(500)
 })
 
 test('verify unauthenticated error', () => {

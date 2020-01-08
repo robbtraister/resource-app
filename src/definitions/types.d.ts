@@ -1,7 +1,6 @@
 interface Message {
   id?: string
-  type?: string
-  action?: string
+  type: string
   error?: object
 }
 
@@ -16,6 +15,7 @@ interface Options {
   }
   host?: string
   isProd?: boolean
+  logging?: boolean
   port?: number
   projectRoot?: string
   workerCount?: number
