@@ -2,9 +2,4 @@
 
 'use strict'
 
-const cluster = require('cluster')
-
-if (module === require.main) {
-  const { master, server } = require('./build/server')
-  ;(cluster.isMaster ? master : server)()
-}
+module === require.main && require('./build/server').main()
