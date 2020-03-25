@@ -1,0 +1,50 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: #ddd;
+  overflow: hidden;
+
+  height: 100vh;
+  width: 240px;
+  transition: width 0.5s;
+
+  .content {
+    padding: 10px;
+
+    .top {
+      position: absolute;
+      top: 10px;
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 10px;
+    }
+
+    .left {
+      position: absolute;
+      left: 15px;
+    }
+
+    .right {
+      position: absolute;
+      right: 15px;
+    }
+
+    .bottom-float {
+      position: absolute;
+      bottom: 10px;
+      transition: bottom 0.5s;
+    }
+  }
+
+  &.collapsed {
+    width: 60px;
+    .content {
+      .bottom-float {
+        bottom: 60px;
+      }
+    }
+  }
+}

@@ -23,5 +23,6 @@ interface Options {
   logging?: boolean
   port?: number
   projectRoot?: string
+  ssr?: boolean
   workerCount?: number
 }

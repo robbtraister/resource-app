@@ -1,24 +1,38 @@
 'use strict'
 
-import PropTypes from 'prop-types'
-import React from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 
-import Router from './router'
+import { Loading } from './components/loading'
+import { wrapUser } from './user'
 
-import storeContext from './contexts/store'
-import userContext from './contexts/user'
-
-const App = ({ user, store }) => (
-  <userContext.Provider value={user}>
-    <storeContext.Provider value={store}>
-      <Router />
-    </storeContext.Provider>
-  </userContext.Provider>
+const LazyApp = React.lazy(() =>
+  import(/* webpackChunkName: "lazy" */ './lazy')
 )
 
-App.propTypes = {
-  user: PropTypes.any,
-  store: PropTypes.any
+const Login = () => <form>Login</form>
+
+export const Entry = () => {
+  const [users, setUsers] = useState()
+  const user = users && users.find(user => user.me)
+
+  useEffect(() => {
+    window
+      .fetch(`/api/v1/users`)
+      .then(resp => resp.json())
+      .then(({ users }) => {
+        setUsers(users.map(wrapUser))
+      })
+  }, [])
+
+  return users === undefined ? (
+    <Loading />
+  ) : user === undefined ? (
+    <Login />
+  ) : (
+    <Suspense fallback={<Loading />}>
+      <LazyApp user={user} users={users} />
+    </Suspense>
+  )
 }
 
-export default App
+export default Entry

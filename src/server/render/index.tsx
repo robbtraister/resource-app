@@ -87,9 +87,13 @@ export default async function renderSite({
         }}
       />
       <Script name={app} />
-      {user && (
-        <script type="text/javascript" src="/auth/user?jsonp=setUser" defer />
-      )}
+      {/* {user && (
+        <script
+          type="text/javascript"
+          src="/api/v1/users/me?jsonp=setUser"
+          defer
+        />
+      )} */}
     </>
   )
 

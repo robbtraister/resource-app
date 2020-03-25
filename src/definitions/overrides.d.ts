@@ -16,3 +16,7 @@ declare namespace JSX {
     'styled-components': any
   }
 }
+
+interface SVGAnimateTransformElement {
+  beginElement: Function
+}

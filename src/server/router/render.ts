@@ -26,26 +26,30 @@ export default function(options) {
     }
   }
 
-  return [
-    render,
+  function staticIndex(req, res, next) {
+    res.sendFile(
+      path.join(options.projectRoot, 'build', 'dist', 'index.html'),
+      err => {
+        err && next()
+      }
+    )
+  }
 
-    async (err, req, res, next) => {
-      // preserve redirect error from initial render attempt
-      isRedirect(err)
-        ? next(err)
-        : render(req, res, renderErr => {
-            // preserve redirect error from secondary render attempt
-            next(isRedirect(renderErr) ? renderErr : err)
-          })
-    },
+  return options.ssr
+    ? [
+        render,
 
-    (req, res, next) => {
-      res.sendFile(
-        path.join(options.projectRoot, 'build', 'dist', 'index.html'),
-        err => {
-          err && next()
-        }
-      )
-    }
-  ]
+        async (err, req, res, next) => {
+          // preserve redirect error from initial render attempt
+          isRedirect(err)
+            ? next(err)
+            : render(req, res, renderErr => {
+                // preserve redirect error from secondary render attempt
+                next(isRedirect(renderErr) ? renderErr : err)
+              })
+        },
+
+        staticIndex
+      ]
+    : staticIndex
 }

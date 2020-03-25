@@ -2,7 +2,10 @@
 
 import express from 'express'
 
-import { Server as ServerError } from '../errors'
+import { Server as ServerError } from '../../errors'
+
+import projectsRouter from './projects'
+import usersRouter from './users'
 
 export default function router(options) {
   const apiRouter = express()
@@ -18,6 +21,10 @@ export default function router(options) {
   apiRouter.use(['/error/:code(\\d+)', '/error'], (req, res, next) => {
     next(new ServerError(+req.params.code || 500))
   })
+
+  apiRouter.use('/v1/projects', projectsRouter(options))
+
+  apiRouter.use('/v1/users', usersRouter(options))
 
   return apiRouter
 }

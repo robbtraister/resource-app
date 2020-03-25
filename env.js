@@ -1,7 +1,5 @@
 'use strict'
 
-const DISABLED = /^(disabled?|false|null|off)$/
-
 const path = require('path')
 
 const { config = {} } = require('./package.json')
@@ -56,7 +54,8 @@ module.exports = {
   host: process.env.HOST || config.host || `http://localhost:${port}`,
 
   isPreact: !(
-    DISABLED.test(process.env.PREACT) || [false, null].includes(config.preact)
+    DISABLED_PATTERN.test(process.env.PREACT) ||
+    [false, null].includes(config.preact)
   ),
 
   isProd,
@@ -66,6 +65,8 @@ module.exports = {
   port,
 
   projectRoot: path.resolve('.'),
+
+  ssr: !DISABLED_PATTERN.test(process.env.SSR),
 
   workerCount: isProd
     ? Number(process.env.WORKER_COUNT) ||

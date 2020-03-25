@@ -165,7 +165,10 @@ module.exports = (_, argv) => {
       // namedModules: true,
       splitChunks: {
         chunks: 'async',
-        minSize: 0
+        minSize: 0,
+        name(module, chunks, cacheGroupKey) {
+          return chunks.length === 1 ? chunks[0].name : cacheGroupKey
+        }
       }
     },
     output: {

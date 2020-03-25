@@ -4,7 +4,6 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
 
 import App from '~/src/views/app'
 
@@ -26,12 +25,7 @@ function render(
         user
       }
 
-      ReactDOM.hydrate(
-        <BrowserRouter>
-          <Component {...props} />
-        </BrowserRouter>,
-        targetElement
-      )
+      ReactDOM.render(<Component {...props} />, targetElement)
     } catch (e) {
       targetElement.innerHTML = originalHTML
       console.error(e)

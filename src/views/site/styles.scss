@@ -1,0 +1,12 @@
+html,
+body,
+:global(#app) {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+a:global(.active) {
+  text-decoration: none;
+  color: #888;
+}

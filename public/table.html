@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      .container {
+        display: flex;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        background-color: #ddd;
+        height: 100vh;
+        width: 240px;
+        transition: width 0.5s;
+      }
+      .sidebar.collapsed {
+        width: 100px;
+      }
+
+      .content {
+        background-color: #fed;
+        height: 600px;
+        overflow-y: auto;
+      }
+    </style>
+    <script>
+      let collapsed = false;
+      function collapse() {
+        collapsed = !collapsed;
+        document.getElementById('sidebar').className = collapsed ? 'sidebar collapsed' : 'sidebar';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div id="sidebar" class="sidebar">
+        sidebar
+        <button style="position: absolute; right: 10px; bottom: 10px" onclick="javascript:collapse()">toggle</button>
+      </div>
+      <div class="content">
+        content
+      </div>
+    </div>
+    <!-- <table id="app">
+      <tr>
+        <td id="sidebar" class="sidebar">
+          <div style="position: relative; height: 100%">
+            sidebar
+            <button style="position: absolute; right: 10px; bottom: 10px" onclick="javascript:collapse()">toggle</button>
+          </div>
+        </td>
+        <td>
+          <div style="height: 100%; overflow: scroll">
+            <div style="height: 2000px">
+              content
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table> -->
+  </body>
+</html>
