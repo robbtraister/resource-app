@@ -8,9 +8,9 @@ import styles from './styles.scss'
 export const sidebarRef: RefObject<HTMLDivElement> = createRef()
 
 export const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed /*, setCollapsed */] = useState(false)
 
-  const transformRef: React.RefObject<SVGAnimateTransformElement> = createRef()
+  // const transformRef: React.RefObject<SVGAnimateTransformElement> = createRef()
 
   return (
     <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
@@ -29,7 +29,7 @@ export const Sidebar = () => {
           <hr />
           <div ref={sidebarRef} />
         </div>
-        <div className={`${styles.left} ${styles['bottom-float']}`}>icons</div>
+        {/* <div className={`${styles.left} ${styles['bottom-float']}`}>icons</div>
         <div className={`${styles.right} ${styles.bottom}`}>
           <a
             className={styles.toggle}
@@ -58,7 +58,7 @@ export const Sidebar = () => {
               </path>
             </svg>
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -6,13 +6,13 @@ import { Loading } from './components/loading'
 import { wrapUser } from './user'
 
 const LazyApp = React.lazy(() =>
-  import(/* webpackChunkName: "lazy" */ './lazy')
+  import(/* webpackChunkName: "main" */ './main')
 )
 
 const Login = () => <form>Login</form>
 
 export const Entry = () => {
-  const [users, setUsers] = useState()
+  const [users, setUsers] = useState(null)
   const user = users && users.find(user => user.me)
 
   useEffect(() => {

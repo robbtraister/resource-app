@@ -22,7 +22,13 @@ export default function router(options) {
     next(new ServerError(+req.params.code || 500))
   })
 
-  apiRouter.use('/v1/projects', projectsRouter(options))
+  apiRouter.use(
+    '/v1/projects',
+    (req, res, next) => {
+      setTimeout(next, 1000)
+    },
+    projectsRouter(options)
+  )
 
   apiRouter.use('/v1/users', usersRouter(options))
 

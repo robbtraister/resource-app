@@ -188,14 +188,19 @@ module.exports = (_, argv) => {
     ],
     resolve: {
       ...resolve,
-      alias:
-        isProd && env.isPreact
+      alias: {
+        ...resolve.alias,
+        react: require.resolve('react'),
+        'react-dom': require.resolve('react-dom'),
+        'react-router': require.resolve('react-router'),
+        'react-router-dom': require.resolve('react-router-dom'),
+        ...(isProd && env.isPreact
           ? {
-              ...resolve.alias,
               react: 'preact/compat',
               'react-dom': 'preact/compat'
             }
-          : resolve.alias
+          : {})
+      }
     },
     target: 'web',
     watchOptions

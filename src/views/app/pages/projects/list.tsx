@@ -1,19 +1,27 @@
 'use strict'
 
 import React from 'react'
-import { Link, useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
+import { Client } from 'react-router-resource'
 
-import { useQueryParams } from '../../hooks/useQueryParams'
 import { Loading } from '../../components/loading'
+import { useQueryParams } from '../../hooks/useQueryParams'
+import { IProject, IParams } from '../../models/project'
 
-import { IProject, IParams } from './interfaces'
-
-export const ProjectsList = ({ projects }: { projects?: IProject[] }) => {
+export const ListProjects = ({
+  match,
+  resources: { projects }
+}: {
+  match: { url: string }
+  resources: { projects?: IProject[] }
+}) => {
   const history = useHistory()
-  const match = useRouteMatch()
   const query: IParams = useQueryParams()
 
-  return projects ? (
+  const page = +(query.page || 1)
+
+  return (
     <>
       <button
         onClick={() => {
@@ -22,19 +30,41 @@ export const ProjectsList = ({ projects }: { projects?: IProject[] }) => {
         reverse
       </button>
 
-      <ul>
-        {projects.map(project => (
-          <li key={project.id}>
-            <Link to={`${match.url}/${project.id}`}>{project.name}</Link>
-          </li>
-        ))}
-      </ul>
+      {projects ? (
+        <>
+          <ul>
+            {projects.map(project => (
+              <li key={project.id}>
+                <Link to={`${match.url}/${project.id}`}>{project.name}</Link>
+              </li>
+            ))}
+          </ul>
+
+          <div style={{ width: '300px ' }}>
+            {page > 1 && (
+              <Link
+                style={{ float: 'left' }}
+                to={`?${Client.serializeParams({ ...query, page: page - 1 })}`}>
+                &lt; prev
+              </Link>
+            )}
+
+            {projects.length === 5 && (
+              <Link
+                style={{ float: 'right' }}
+                to={`?${Client.serializeParams({ ...query, page: page + 1 })}`}>
+                next &gt;
+              </Link>
+            )}
+          </div>
+        </>
+      ) : (
+        <Loading />
+      )}
     </>
-  ) : (
-    <Loading />
   )
 }
 
-ProjectsList.displayName = 'Projects.List'
+ListProjects.displayName = 'Project.List'
 
-export default ProjectsList
+export default ListProjects
