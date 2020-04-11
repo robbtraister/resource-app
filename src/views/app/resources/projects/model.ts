@@ -1,4 +1,4 @@
-import { Client } from 'react-router-resource'
+import { RefreshClient } from '../refresh'
 
 export class Project {
   readonly id: string
@@ -16,7 +16,7 @@ const projectsQuery = {
   desc: false
 }
 
-export const projectsClient = Client.getInstance<Project>({
+export const projectsClient = RefreshClient.getInstance<Project>({
   getModel: payload => new Project(payload),
   endpoint: '/api/v1/projects',
   defaultQuery: projectsQuery

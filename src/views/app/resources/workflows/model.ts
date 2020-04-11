@@ -1,4 +1,4 @@
-import { Client } from 'react-router-resource'
+import { RefreshClient } from '../refresh'
 
 import { projectsClient } from '../projects/model'
 
@@ -12,9 +12,9 @@ const workflowsQuery = {
   desc: false
 }
 
-export class WorkflowsClient extends Client<Workflow> {
+export class WorkflowsClient extends RefreshClient<Workflow> {
   static fromEndpoint(endpoint: string) {
-    return Client.getInstance<Workflow>({
+    return RefreshClient.getInstance<Workflow>({
       endpoint,
       defaultQuery: workflowsQuery,
       name: 'entries'

@@ -58,13 +58,19 @@ export class Breadcrumb extends React.Component<
   }
 }
 
-export const ListBreadcrumb = ({ children }: { children: React.ReactNode }) => {
+const ListBreadcrumb = ({ children }: { children: React.ReactNode }) => {
   const match = useRouteMatch()
 
   return <Breadcrumb to={match.url}>{children}</Breadcrumb>
 }
 
-export const ShowBreadcrumb = ({ placeholder }: { placeholder: string }) => {
+const ShowBreadcrumb = ({
+  placeholder,
+  fn = obj => obj.name
+}: {
+  placeholder: string
+  fn?: (object) => string
+}) => {
   const {
     name: { singular }
   } = useConfig()
@@ -79,7 +85,8 @@ export const ShowBreadcrumb = ({ placeholder }: { placeholder: string }) => {
         resources: object
       }) => (
         <Breadcrumb to={match.url}>
-          {(resources[singular] && resources[singular].name) || placeholder}
+          {(singular && resources[singular] && fn(resources[singular])) ||
+            placeholder}
         </Breadcrumb>
       )}
     />
@@ -88,15 +95,17 @@ export const ShowBreadcrumb = ({ placeholder }: { placeholder: string }) => {
 
 export const ResourceBreadcrumbs = ({
   label,
-  placeholder
+  placeholder,
+  fn
 }: {
   label: string
   placeholder: string
+  fn?: (object) => string
 }) => {
   return (
     <>
       <ListBreadcrumb>{label}</ListBreadcrumb>
-      <ShowBreadcrumb placeholder={placeholder} />
+      <ShowBreadcrumb placeholder={placeholder} fn={fn} />
     </>
   )
 }

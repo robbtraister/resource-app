@@ -4,7 +4,7 @@ import React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { Resource, Show, List } from 'react-router-resource'
 
-import { ResourceBreadcrumbs } from '../../components/breadcrumb'
+import { ResourceChrome } from '../../components/chrome'
 
 import { projectsClient } from '../../resources/projects/model'
 import { ListProjects } from '../../resources/projects/list'
@@ -17,7 +17,7 @@ import { Workflows } from './workflows'
 export const Projects = ({ path }: { path: string }) => {
   return (
     <Resource path={path} client={projectsClient}>
-      <ResourceBreadcrumbs label="Projects" placeholder="Project" />
+      <ResourceChrome label="Projects" placeholder="Project" />
 
       <List component={ListProjects} />
       <Show exact component={ShowProject} />

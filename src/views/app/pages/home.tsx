@@ -2,6 +2,13 @@
 
 import React from 'react'
 
-export const Home = () => <div>Welcome</div>
+import { Title } from '../components/title'
+
+export const Home = () => (
+  <>
+    <Title title="Welcome" />
+    <div>Welcome</div>
+  </>
+)
 
 export default Home

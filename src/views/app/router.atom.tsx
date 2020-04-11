@@ -4,7 +4,7 @@ import React from 'react'
 import { Redirect, Route, Switch } from 'react-router'
 import { Resource, Show, List, New } from 'react-router-resource'
 
-import { ResourceBreadcrumbs } from './components/breadcrumb'
+import { ResourceChrome } from './components/chrome'
 
 import { Home } from './pages/home'
 
@@ -26,7 +26,7 @@ export const Router = () => (
     <Resource
       path="/projects"
       defaultQuery={{ page: 1, perPage: 5, sortBy: 'name', desc: false }}>
-      <ResourceBreadcrumbs label="Projects" placeholder="Project" />
+      <ResourceChrome label="Projects" placeholder="Project" />
       <List component={ListProjects} />
       <Show exact component={ShowProject} />
 
@@ -39,7 +39,7 @@ export const Router = () => (
             <Resource
               path={`${match.url}/datasets`}
               defaultQuery={{ sortBy: 'name', desc: false }}>
-              <ResourceBreadcrumbs label="Datasets" placeholder="Dataset" />
+              <ResourceChrome label="Datasets" placeholder="Dataset" />
               <List component={ListDatasets} />
               <Show exact component={ShowDataset} />
             </Resource>
@@ -48,7 +48,7 @@ export const Router = () => (
              * Predictors
              */}
             <Resource path={`${match.url}/predictors`}>
-              <ResourceBreadcrumbs label="Predictors" placeholder="Predictor" />
+              <ResourceChrome label="Predictors" placeholder="Predictor" />
               <Show exact component={ShowPredictor} />
             </Resource>
 
@@ -59,7 +59,7 @@ export const Router = () => (
               path={`${match.url}/workflows`}
               payloadName="entries"
               defaultQuery={{ sortBy: 'name', desc: false }}>
-              <ResourceBreadcrumbs label="Workflows" placeholder="Workflow" />
+              <ResourceChrome label="Workflows" placeholder="Workflow" />
               <List component={ListWorkflows} />
               <Show exact component={ShowWorkflow} />
 
@@ -70,7 +70,7 @@ export const Router = () => (
                      * Executions
                      */}
                     <Resource path={`${match.url}/executions`}>
-                      <ResourceBreadcrumbs
+                      <ResourceChrome
                         label="Executions"
                         placeholder="Execution"
                       />

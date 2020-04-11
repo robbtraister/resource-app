@@ -25,7 +25,7 @@ export default function router(options) {
   apiRouter.use(
     '/v1/projects',
     (req, res, next) => {
-      setTimeout(next, 1000)
+      setTimeout(next, 500)
     },
     projectsRouter(options)
   )

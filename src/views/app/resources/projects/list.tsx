@@ -53,7 +53,7 @@ export const ListProjects = ({
               ))}
             </ul>
 
-            <div style={{ width: '300px ' }}>
+            <div style={{ width: '350px' }}>
               <div style={{ float: 'left' }}>
                 <PrevComponent
                   to={`?${client.serializeQuery({

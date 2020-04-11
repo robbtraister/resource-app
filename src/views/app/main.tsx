@@ -8,7 +8,7 @@ import { Breadcrumbs } from './components/breadcrumbs'
 import { Sidebar } from './components/sidebar'
 import { SidebarContent } from './components/sidebar-content'
 
-import { Router } from './router.atom'
+import { Router } from './router'
 
 import { userContext, usersContext } from './contexts/users'
 
