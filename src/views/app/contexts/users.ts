@@ -2,5 +2,5 @@
 
 import { createContext } from 'react'
 
-export const usersContext = createContext(null)
-export const userContext = createContext(null)
+export const usersContext = createContext<any[] | undefined>(undefined)
+export const userContext = createContext<object | undefined>(undefined)

@@ -8,7 +8,7 @@ import { Breadcrumbs } from './components/breadcrumbs'
 import { Sidebar } from './components/sidebar'
 import { SidebarContent } from './components/sidebar-content'
 
-import { Router } from './router'
+import { Router } from './router.atom'
 
 import { userContext, usersContext } from './contexts/users'
 
@@ -16,9 +16,9 @@ import styles from './styles.scss'
 
 export const App = ({ user, users }: { user: any; users: any[] }) => {
   return (
-    <usersContext.Provider value={users}>
-      <userContext.Provider value={user}>
-        <ApiPrefix value="/api/v1">
+    <ApiPrefix value="/api/v1">
+      <usersContext.Provider value={users}>
+        <userContext.Provider value={user}>
           <BrowserRouter>
             <div className={styles.container}>
               <Sidebar />
@@ -31,9 +31,9 @@ export const App = ({ user, users }: { user: any; users: any[] }) => {
               </div>
             </div>
           </BrowserRouter>
-        </ApiPrefix>
-      </userContext.Provider>
-    </usersContext.Provider>
+        </userContext.Provider>
+      </usersContext.Provider>
+    </ApiPrefix>
   )
 }
 

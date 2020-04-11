@@ -1,6 +1,8 @@
 'use strict'
 
 import express from 'express'
+import bodyParser from 'body-parser'
+import { v4 } from 'uuid'
 
 import datasets from './datasets.json'
 import projects from './projects.json'
@@ -11,12 +13,15 @@ const PER_PAGE = 5
 export default function projectsRouter(options) {
   const projectsRouter = express()
 
+  projectsRouter.use(bodyParser.json())
+
   projectsRouter.get('/', (req, res, next) => {
     const page = +(req.query.page || 1) - 1
+    const perPage = +req.query.perPage || PER_PAGE
     const sortBy = req.query.sortBy || 'name'
     const descending = /^(true|on|1)$/i.test(req.query.desc)
 
-    const results = []
+    const results = ([] as { name: string }[])
       .concat(projects || [])
       .map(project =>
         Object.assign({}, project, { name: `${project.name} - ${Date.now()}` })
@@ -27,7 +32,7 @@ export default function projectsRouter(options) {
     }
 
     res.send({
-      projects: results.slice(page * PER_PAGE, (page + 1) * PER_PAGE)
+      projects: results.slice(page * perPage, (page + 1) * perPage)
     })
   })
   projectsRouter.get('/:projectId', (req, res, next) => {
@@ -36,15 +41,16 @@ export default function projectsRouter(options) {
     )
     res.send({
       project: Object.assign({}, project, {
-        name: `${project.name} - ${Date.now()}`
+        name: `${project ? project.name : 'N/A'} - ${Date.now()}`
       })
     })
   })
+
   projectsRouter.get('/:projectId/datasets', (req, res, next) => {
     const sortBy = req.query.sortBy || 'name'
     const descending = /^(true|on|1)$/i.test(req.query.desc)
 
-    const results = []
+    const results = ([] as { name: string }[])
       .concat(datasets[req.params.projectId] || [])
       .map(dataset =>
         Object.assign({}, dataset, { name: `${dataset.name} - ${Date.now()}` })
@@ -67,11 +73,12 @@ export default function projectsRouter(options) {
       })
     })
   })
+
   projectsRouter.get('/:projectId/workflows', (req, res, next) => {
     const sortBy = req.query.sortBy || 'name'
     const descending = /^(true|on|1)$/i.test(req.query.desc)
 
-    const results = []
+    const results = ([] as { name: string }[])
       .concat(workflows[req.params.projectId] || [])
       .map(workflow =>
         Object.assign({}, workflow, {
@@ -85,6 +92,12 @@ export default function projectsRouter(options) {
 
     res.send({ entries: results })
   })
+  projectsRouter.post('/:projectId/workflows', (req, res, next) => {
+    const projectWorkflows = workflows[req.params.projectId] || []
+    const workflow = { ...req.body, id: v4() }
+    projectWorkflows.push(workflow)
+    res.send({ entry: workflow })
+  })
   projectsRouter.get('/:projectId/workflows/:workflowId', (req, res, next) => {
     const projectWorkflows = workflows[req.params.projectId] || []
     const workflow = projectWorkflows.find(
@@ -95,6 +108,14 @@ export default function projectsRouter(options) {
         name: `${workflow.name} - ${Date.now()}`
       })
     })
+  })
+  projectsRouter.put('/:projectId/workflows/:workflowId', (req, res, next) => {
+    const projectWorkflows = workflows[req.params.projectId] || []
+    const workflow = projectWorkflows.find(
+      workflow => workflow.id === req.params.workflowId
+    )
+    Object.assign(workflow, req.body)
+    res.send({ entry: workflow })
   })
 
   return projectsRouter

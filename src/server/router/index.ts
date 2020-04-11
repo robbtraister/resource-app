@@ -1,7 +1,7 @@
 'use strict'
 
 import cookieParser from 'cookie-parser'
-import csurf from 'csurf'
+// import csurf from 'csurf'
 import express from 'express'
 
 import api from './api'
@@ -19,7 +19,7 @@ export default function router(options: Options) {
   // don't serve under '/auth' because we need to run authorization on all endpoints
   router.use(auth(options))
 
-  router.use(csurf({ cookie: true }))
+  // router.use(csurf({ cookie: true }))
 
   router.use('/api', options.auth ? verify() : [], api(options))
 

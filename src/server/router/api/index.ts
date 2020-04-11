@@ -11,7 +11,7 @@ export default function router(options) {
   const apiRouter = express()
 
   apiRouter.use('/csrf', (req, res, next) => {
-    res.send({ csrf: req.csrfToken() })
+    res.send({ csrf: req.csrfToken && req.csrfToken() })
   })
 
   apiRouter.use('/uri', (req, res, next) => {
