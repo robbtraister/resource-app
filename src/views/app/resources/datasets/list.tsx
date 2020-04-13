@@ -9,13 +9,14 @@ import { Loading } from '../../components/loading'
 import { useQueryParams } from '../../hooks/useQueryParams'
 
 import { Dataset } from './model'
+import { Resources } from '..'
 
 export const ListDatasets = ({
   match,
   resources: { datasets }
 }: {
   match: { url: string }
-  resources: { datasets?: Dataset[] }
+  resources: Resources
 }) => {
   const history = useHistory()
   const query: Query = useQueryParams()

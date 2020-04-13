@@ -4,12 +4,12 @@ import React from 'react'
 
 import { Loading } from '../../components/loading'
 
-import { Dataset } from './model'
+import { Resources } from '..'
 
 export const ShowDataset = ({
   resources: { dataset }
 }: {
-  resources: { dataset?: Dataset }
+  resources: Resources
 }) => {
   return dataset ? (
     <>

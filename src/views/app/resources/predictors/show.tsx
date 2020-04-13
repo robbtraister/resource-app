@@ -2,11 +2,10 @@
 
 import React from 'react'
 
-import { IPredictor } from './model'
+import { Resources } from '..'
 
-export const ShowPredictor = ({ predictor }: { predictor: IPredictor }) => (
-  <div>{predictor.name}</div>
-)
+export const ShowPredictor = ({ predictor }: Resources) =>
+  predictor ? <div>{predictor.name}</div> : null
 
 ShowPredictor.displayName = 'Predictor.Show'
 

@@ -7,12 +7,12 @@ import { useConfig } from 'react-router-resource'
 import { Loading } from '../../components/loading'
 import { useMounted } from '../../hooks/useMounted'
 
-import { Workflow } from './model'
+import { Resources } from '..'
 
 export const ShowWorkflow = ({
   resources: { workflow }
 }: {
-  resources: { workflow?: Workflow }
+  resources: Resources
 }) => {
   const history = useHistory()
   const { client, path } = useConfig()

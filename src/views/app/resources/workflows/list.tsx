@@ -9,13 +9,14 @@ import { Loading } from '../../components/loading'
 import { useQueryParams } from '../../hooks/useQueryParams'
 
 import { Workflow } from './model'
+import { Resources } from '..'
 
 export const ListWorkflows = ({
   match,
   resources: { workflows }
 }: {
   match: { url: string }
-  resources: { workflows?: Workflow[] }
+  resources: Resources
 }) => {
   const history = useHistory()
   const query: Query = useQueryParams()

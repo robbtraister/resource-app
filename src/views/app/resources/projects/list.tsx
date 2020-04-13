@@ -9,14 +9,15 @@ import { Loading } from '../../components/loading'
 import { useQueryParams } from '../../hooks/useQueryParams'
 
 import { Project } from './model'
+import { Resources } from '..'
 
 export const ListProjects = ({
   match,
-  resources: { projects, projects_meta: projectsMeta }
+  resources: { projects }
 }: {
   match: { url: string }
   // eslint-disable-next-line camelcase
-  resources: { projects?: Project[]; projects_meta?: object }
+  resources: Resources
 }) => {
   const history = useHistory()
   const query: Query = useQueryParams()

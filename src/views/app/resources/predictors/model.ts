@@ -1,3 +1,3 @@
-export interface IPredictor {
+export interface Predictor {
   name: string
 }

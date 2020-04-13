@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom'
 
 import { Loading } from '../../components/loading'
 
-import { Project } from './model'
+import { Resources } from '..'
 
 export const ShowProject = ({
   match,
   resources: { project }
 }: {
   match: { url: string }
-  resources: { project?: Project }
+  resources: Resources
 }) => {
   return project ? (
     <>
