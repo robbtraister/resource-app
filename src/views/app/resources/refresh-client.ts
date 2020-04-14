@@ -42,10 +42,10 @@ export class CursorClient<Model> extends RefreshClient<Model> {
   protected cursorCache = {}
 
   private pageToCursor(query: Query): Promise<Query> {
-    const { page, cursor, ...nonPageQuery } = query
-    const pageNum = +page || 1
+    const { page: pageArg, cursor, ...nonPageQuery } = query
+    const page = +pageArg || 1
 
-    if (pageNum === 1) {
+    if (page === 1) {
       return Promise.resolve(nonPageQuery)
     }
 
@@ -54,29 +54,26 @@ export class CursorClient<Model> extends RefreshClient<Model> {
     const queryCursorCache = (this.cursorCache[queryCursorString] =
       this.cursorCache[queryCursorString] || [])
 
-    if (cursor || queryCursorCache.length > pageNum) {
+    if (cursor || queryCursorCache.length > page) {
       return Promise.resolve({
         ...nonPageQuery,
-        cursor: cursor || queryCursorCache[pageNum]
+        cursor: cursor || queryCursorCache[page]
       })
     } else {
       // recurse backwards until we find a page whose cursor is known
       return new Promise((resolve, reject) => {
-        this.find(
-          { ...nonPageQuery, page: pageNum - 1 },
-          (err, _, attributes) => {
-            if (err) {
-              return reject(err)
-            }
-
-            const nextCursor = attributes.nextCursor || attributes.next
-            queryCursorCache[pageNum] = nextCursor
-            resolve({
-              ...nonPageQuery,
-              cursor: nextCursor
-            })
+        this.find({ ...nonPageQuery, page: page - 1 }, (err, _, attributes) => {
+          if (err) {
+            return reject(err)
           }
-        )
+
+          const nextCursor = attributes.nextCursor || attributes.next
+          queryCursorCache[page] = nextCursor
+          resolve({
+            ...nonPageQuery,
+            cursor: nextCursor
+          })
+        })
       })
     }
   }
@@ -108,18 +105,19 @@ export class CursorClient<Model> extends RefreshClient<Model> {
       callbackArg
     )
 
-    const { page, ...nonPageQuery } = query
-    const pageNum = +page || 1
+    const page = +query.page || 1
 
-    const nonPageQueryString = this.serializeQuery(nonPageQuery)
+    const queryString = this.serializeQuery(query)
 
-    const queryCursorCache = (this.cursorCache[nonPageQueryString] =
-      this.cursorCache[nonPageQueryString] || [])
+    const queryCursorCache = (this.cursorCache[queryString] =
+      this.cursorCache[queryString] || [])
 
-    let queryCursorString
-    if (queryCursorCache.length > pageNum) {
-      queryCursorString = `${nonPageQueryString}&cursor=${queryCursorCache[pageNum]}`
-      const ids = this.resourceCache.queries[queryCursorString]
+    const cachedQueryString =
+      queryCursorCache.length > page &&
+      `${queryString}&cursor=${queryCursorCache[page]}`
+
+    if (cachedQueryString) {
+      const ids = this.resourceCache.queries[cachedQueryString]
       const models = ids && ids.map(id => this.resourceCache.items[id])
 
       if (callback) {
@@ -132,34 +130,35 @@ export class CursorClient<Model> extends RefreshClient<Model> {
       }
     }
 
-    const promise = this.pageToCursor({ ...nonPageQuery, page: pageNum })
-      .then(query => {
-        queryCursorString = `${this.serializeQuery(query)}&cursor=${
-          query.cursor
-        }`
-        return this.fetch(`${this.endpoint}?${queryCursorString}`)
-      })
-      .then(resp => resp.json())
-      .then(payload => {
-        const models = (
-          (this.name ? payload[this.name.plural] : payload) || []
-        ).map(datum => this.getModel(datum))
+    const promise = Promise.resolve(
+      cachedQueryString ||
+        this.pageToCursor({ ...query, page }).then(
+          query => `${this.serializeQuery(query)}&cursor=${query.cursor}`
+        )
+    ).then(cursorQueryString =>
+      this.fetch(`${this.endpoint}?${cursorQueryString}`)
+        .then(resp => resp.json())
+        .then(payload => {
+          const models = (
+            (this.name ? payload[this.name.plural] : payload) || []
+          ).map(datum => this.getModel(datum))
 
-        if (this.name) {
-          delete payload[this.name.plural]
-        }
+          if (this.name) {
+            delete payload[this.name.plural]
+          }
 
-        const nextCursor = payload.nextCursor || payload.next
-        queryCursorCache[pageNum] = nextCursor
+          const nextCursor = payload.nextCursor || payload.next
+          queryCursorCache[page] = nextCursor
 
-        this.resourceCache.queries[queryCursorString] = models.map(model => {
-          const id = model[this.idField]
-          this.resourceCache.items[id] = model
-          return id
+          this.resourceCache.queries[cursorQueryString] = models.map(model => {
+            const id = model[this.idField]
+            this.resourceCache.items[id] = model
+            return id
+          })
+
+          return [models, this.name ? payload : {}]
         })
-
-        return [models, this.name ? payload : {}]
-      })
+    )
 
     return CursorClient.promiseToCallback(promise, callback)
   }
