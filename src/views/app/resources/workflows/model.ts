@@ -1,4 +1,4 @@
-import { RefreshClient } from '../refresh'
+import { RefreshClient } from '../refresh-client'
 
 import { projectsClient } from '../projects/model'
 

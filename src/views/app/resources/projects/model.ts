@@ -1,4 +1,4 @@
-import { RefreshClient } from '../refresh'
+import { RefreshClient } from '../refresh-client'
 
 export class Project {
   readonly id: string
